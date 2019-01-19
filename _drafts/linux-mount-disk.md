@@ -63,4 +63,4 @@ I/O 大小(最小/最佳)：512 字节 / 512 字节
 /dev/sda1: UUID="X-X-X-X-X" TYPE="ext4" PARTUUID="ce24edc0-01"
 ```
 为了避免可能会存在的隐私泄漏风险。故将UUID码掉处理。
-记下需要挂载分区的UUID，复制此ID，并修改``
+记下需要挂载分区的UUID，复制此UUID，并修改`/etc/fstab`文件
