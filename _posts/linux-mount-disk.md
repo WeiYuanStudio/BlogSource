@@ -3,12 +3,15 @@ title: Linux 挂载第二块硬盘
 date: 2019-01-19 13:24:55
 thumbnail:
 categories:
- - 笔记
- - Linux
- - 系统
+  - 笔记
+  - Linux
 tags:
+ - Linux
+ - 系统配置
 ---
+
 小米笔记本的240G硬盘始终都还是不太够用。从一台旧联想上拆了块Intel SSD。不像U盘那样，装上去后系统并没有直接显示这块硬盘。这时候需要手动挂载硬盘了。由于手动挂载的机会也不多。所以记录一下。  
+<!--more-->
 ## 先查看一下我们的硬盘信息  
 运行`$ sudo fdisk -l`查看硬盘分区信息   
 ```bash
@@ -63,4 +66,12 @@ I/O 大小(最小/最佳)：512 字节 / 512 字节
 /dev/sda1: UUID="X-X-X-X-X" TYPE="ext4" PARTUUID="ce24edc0-01"
 ```
 为了避免可能会存在的隐私泄漏风险。故将UUID码掉处理。
-记下需要挂载分区的UUID，复制此UUID，并修改`/etc/fstab`文件
+记下需要挂载分区的UUID，复制此UUID，并修改`/etc/fstab`文件。
+比如我想将该分区挂载到根目录下的/disk2。可以按照如下填写。
+```
+UUID=XXXXXXXX /disk2 ext4 defaults 0
+```
+![](https://ws1.sinaimg.cn/large/007i8nDUgy1fzd1f3mlmwj30vi0ewta6.jpg)
+Reboot，然后你应该能看见磁盘正常挂载了。
+
+关于fstab配置文件,这里放一个[wiki链接](https://wiki.archlinux.org/index.php/Fstab_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)#atime_%E5%8F%82%E6%95%B0)
