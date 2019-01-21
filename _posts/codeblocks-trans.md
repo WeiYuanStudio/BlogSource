@@ -2,9 +2,12 @@
 title: CodeBlocks 安装简体中文包(Linux)
 categories:
   - 笔记
+  - 环境
 tags:
   - CodeBlocks
   - Linux
+  - 汉化
+  - 环境
 date: 2019-01-21 11:38:03
 thumbnail:
 ---
@@ -22,7 +25,7 @@ Status是一条绿色的进度条，代表着该项目的翻译进度。点击�
 >PO 是 Portable Object (可移植对象)的缩写形式；MO 是 Machine Object (机器对象) 的缩写形式。
 >MO 文件是面向计算机的、由 PO 文件通过 gettext 软件包编译而成的二进制文件。程序通过读取 MO 文件使自身的界面转换成用户使用的语言。
 
-我们需要的是MO文件。选择了**MO format**后，点击下面**Request Download**，接下来就是坐等收邮件了。
+我们**需要的是MO文件**。选择了**MO format**后，点击下面**Request Download**，接下来就是坐等收邮件了。
 
 下载链接将会通过邮件发送到你的注册邮箱。收到邮件点击下载就可以啦。经过我的测试该链接貌似并不需要登录Cookie，所以这里我把链接放出来。希望没有那么快失效
 官方链接：
@@ -42,7 +45,8 @@ https://pan.baidu.com/s/1bpGkl0j?errno=0&errmsg=Auth%20Login%20Sucess&&bduss=&ss
 
 ---
 如果你想了解更多有关于语言包，已经国际化有关的内容，可以查看下面的链接。
-扩展阅读与链接：
+
+**扩展阅读与链接：**
 [国际化与本地化](https://zh.wikipedia.org/wiki/%E5%9B%BD%E9%99%85%E5%8C%96%E4%B8%8E%E6%9C%AC%E5%9C%B0%E5%8C%96)
 [Gettext](https://zh.wikipedia.org/wiki/Gettext)
 [多国语言解决方案gnu.gettext + poedit](https://www.cnblogs.com/hont/p/5129806.html)
