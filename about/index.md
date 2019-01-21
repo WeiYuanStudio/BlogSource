@@ -7,6 +7,8 @@ date: 2019-01-17 21:51:27
 
 技能树: C++ & JAVA & HTML & CSS & MarkDown
 
+Font Family: Droid Sans Mono + Inconsolata
+
 Laptop: XiaoMi Pro 15(i7-8550U + 16G RAM + Manjaro Linux)
 
 Mobile Devices: XiaoMi Mix 2S(Pixel Experience) & iPad Mini 4
