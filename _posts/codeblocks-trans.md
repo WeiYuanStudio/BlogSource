@@ -1,15 +1,19 @@
 ---
 title: CodeBlocks 安装简体中文包(Linux)
+categories:
+  - 笔记
+tags:
+  - CodeBlocks
+  - Linux
 date: 2019-01-21 11:38:03
 thumbnail:
-categories:
- - 笔记
-tags:
- - CodeBlocks
- - Linux
 ---
 
+
 在Linux上安装完CodeBlocks后。进行简体中文包安装。
+
+<!--more-->
+
 这是CodeBlocks各种语言的语言包链接：
 https://translations.launchpad.net/codeblocks/trunk/+pots/codeblocks
 
@@ -38,7 +42,9 @@ https://pan.baidu.com/s/1bpGkl0j?errno=0&errmsg=Auth%20Login%20Sucess&&bduss=&ss
 
 ---
 如果你想了解更多有关于语言包，已经国际化有关的内容，可以查看下面的链接。
-扩展阅读：
+扩展阅读与链接：
 [国际化与本地化](https://zh.wikipedia.org/wiki/%E5%9B%BD%E9%99%85%E5%8C%96%E4%B8%8E%E6%9C%AC%E5%9C%B0%E5%8C%96)
 [Gettext](https://zh.wikipedia.org/wiki/Gettext)
 [多国语言解决方案gnu.gettext + poedit](https://www.cnblogs.com/hont/p/5129806.html)
+[POEDIT](https://poedit.net/)
+[语言文件.po .pot和.mo简介及汉化](http://blog.51cto.com/xxstar/1940854)
