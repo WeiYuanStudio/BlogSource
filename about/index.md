@@ -5,14 +5,20 @@ date: 2019-01-17 21:51:27
 现就读于JLUZH的一名大一学生，专业是软件工程。
 喜欢Google，Apple。讨厌Micro$oft。
 
-技能树: C++ & JAVA & HTML & CSS & MarkDown
+**Editor:** VS Code & HBuilder X & Sublime Text
 
-Font Family: Droid Sans Mono + Inconsolata
+**IDE:** Code::Blocks & IDEA
 
-Laptop: XiaoMi Pro 15(i7-8550U + 16G RAM + Manjaro Linux)
+**技能树:** C++ & JAVA & HTML & CSS & MarkDown
 
-Mobile Devices: XiaoMi Mix 2S(Pixel Experience) & iPad Mini 4
+**Font Family:** Droid Sans Mono & Inconsolata
 
-Photographic Equipment: SONY A6000 & DJI Phantom 3 Pro
+**Laptop:** XiaoMi Pro 15(i7-8550U + 16G RAM + Manjaro Linux)
 
-IM：Hibikie@Telegram
+**Mobile Devices:** XiaoMi Mix 2S(Pixel Experience) & iPad Mini 4 & Kindle
+
+**Photographic Equipment:** SONY A6000 & DJI Phantom 3 Pro
+
+**IM:** Hibikie@Telegram
+
+**Mail:** <a target="_blank" href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email=rp_en5mZm52dn5bu39_AzcHD" style="text-decoration:none;">戳这里发邮件给我</a>
