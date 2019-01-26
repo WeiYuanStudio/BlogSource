@@ -38,4 +38,4 @@ nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
 nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
 nginx: [emerg] still could not bind()
 ```
-大概是因为Nginx已经运行在后台了，可以使用htop查看一下后台进程。在htop里面输入`/nginx`即可查找nginx进程了。
+大概是因为Nginx已经运行在后台了，可以`nginx -s stop`停止服务,或者使用htop查看一下后台进程。在htop里面输入`/nginx`即可查找nginx进程了。
