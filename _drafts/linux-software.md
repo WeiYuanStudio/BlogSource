@@ -6,3 +6,7 @@ categories:
 tags:
 ---
 mRemoteNG
+tree
+## NPM组件
+ - hexo（静态博客）
+ - serve（文件服务器，[介绍](https://linux.cn/article-10481-1.html))
