@@ -16,6 +16,9 @@ thumbnail:
 ![](https://ws1.sinaimg.cn/large/007i8nDUgy1fzwmftl37fj30gc09wjsy.jpg)
 
 首先下载并安装[OS X El Capitan系统升级包](https://itunes.apple.com/cn/app/os-x-el-capitan/id1147835434?ls=1&mt=12)，以防链接失效，你也可以在[El Capitan的官网](https://support.apple.com/zh-cn/HT206886)找到上述链接。
+
+![](https://ws1.sinaimg.cn/large/007i8nDUgy1fzwnba05smj30oj0hr0ym.jpg)
+
 打开磁盘工具。选择你用于制作启动盘的磁盘。选择抹掉，格式为**MAC OS 扩展式**，设定一个相对简单点的命名例如我设置的`ei`
 打开终端，复制粘贴一下命令
 
