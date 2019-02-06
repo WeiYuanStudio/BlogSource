@@ -1,13 +1,14 @@
 ---
 title: Mac 制作启动盘 重装系统
+categories:
+  - 笔记
+  - MacOS
+tags:
+  - EI Caption
 date: 2019-02-06 11:55:16
 thumbnail:
-categories:
- - 笔记
- - MacOS
-tags:
- - EI Caption
 ---
+
 捡垃圾捡到的Mac Mini A1283原装系统版本为10.10.5(Yosemite)。个人想升级到该机器支持的最新系统版本。中途尝试使用[DiskMaker X](https://diskmakerx.com/)制作系统镜像，但是总是报错，制作失败。于是便有了下面这篇文章。
 
 ![](https://ws1.sinaimg.cn/large/007i8nDUgy1fzwmftl37fj30gc09wjsy.jpg)
