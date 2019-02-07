@@ -4,7 +4,7 @@ categories:
   - 笔记
   - MacOS
 tags:
-  - EI Caption
+  - EI Capitan
 date: 2019-02-06 11:55:16
 thumbnail:
 ---

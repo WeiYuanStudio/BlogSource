@@ -5,13 +5,15 @@ date: 2019-01-17 21:51:27
 现就读于JLUZH的一名大一学生，专业是软件工程。
 喜欢Google，Apple。讨厌Micro$oft。
 
-**Editor:** VS Code & HBuilder X & Sublime Text
+**Editor:** VS Code & HBuilder X & Atom
 
-**IDE:** Code::Blocks & IDEA
+**IDE:** Code::Blocks & IDEA & CLion & WebStorm (JetBrians大法好！)
 
 **技能树:** C++ & JAVA & HTML & CSS & MarkDown
 
 **Font Family:** Droid Sans Mono & Inconsolata
+
+**Desktop:** Apple Mac Mini A1283(EI Capitan)
 
 **Laptop:** XiaoMi Pro 15(i7-8550U + 16G RAM + Manjaro Linux)
 
