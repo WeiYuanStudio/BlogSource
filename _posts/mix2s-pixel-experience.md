@@ -68,3 +68,29 @@ MIUI国内版迁移到国际版的**优点**是去除了广告和大量的系统
 # 写在最后的安利
 
 如果你是一个谷粉，如果你喜欢G Suite，如果你拥有良好的线路，如果会在路由器上使用透明daili，请不要犹豫，Pixel Experience一定不会让你失望的。赶紧刷入了吧。
+
+# 更新日志（追加内容）
+
+这里贴入Changelog，本人并没有精力去尝试所有版本，所以还请保守刷入。
+
+> 20181230
+> Changelog for 30.12.2018 build:
+> - Compiled with Clang (stable) 使用Clang编译
+> - Kernel upstreamed to Linux 4.9.146 内核上游至4.9.146
+> - Added aptX and aptX-HD 增加对aptX和aptX-HD的支持，高品质蓝牙连接协议的支持
+> - Enabled pulse settings 这里不是很清楚，大概是增加对震动的设置吧
+> - Added hotworld enrollment (OK Google with screen on  and off) 应该是改善OK Google在熄屏的识别
+> - Weather on lockscreen improved 锁屏天气支持
+> - Ambient Play improved 支持氛围音乐，难道是时钟内的白噪音吗？
+> - Added saving options for AmbientPlay 增加氛围音乐中的保存选项
+
+> 20190128
+> Changelog for 28.01.2019 build:
+> - Kernel upstreamed to Linux 4.9.153 内核上游至4.9.153
+> - Added QCOM's WiFi Display implementation 高通WiFi显示？ 
+> - Added support for High Brightness Mode (HBM) 增加高亮模式支持。难道是类似小米阳光屏那样通过对显示对比度的调整增强阳光下的显示清晰吗？
+> - Support Alipay and WeChat fingerprint payment 增加支付宝和微信的指纹支持（这个开发者是国人吧2333
+> - Power optimizations 省电优化
+> - Misc changes 和其他杂项改善
+
+PS：以上追加部分于2019.2.9追加，此时博主还是用着最旧版的20181127-1746版本，真的没有那么多时间刷机啦。虽然说更新了很多东西。
