@@ -35,7 +35,19 @@ ERROR: This package requires firmware from MIUI 8.11.15 developer build or newer
 ![edit-updater-script](http://ww1.sinaimg.cn/large/007i8nDUgy1fy5j7tszexj30y50i4n6t.jpg)
 
 如图前面以assert开头的三行统统删了就是了。然后保存，这时候再保存压缩包，压缩软件会自动再打包一次**整个压缩包**。所以相对来说时间会更长一些，视硬盘的速度而论。
-打包好后就将压缩包再次通过MTP拉到手机当中，或者使用U盘连接到手机上，TWRP选择挂载OTG，选择压缩包，这时候没有了底包版本检测脚本就可以成功刷入了。但是就是不知道不刷底包能否成功刷入PE。（舍友的小米Note3刷PE的时候，我看了下`update-script`文件，发现并没有类似的几行检测脚本。所以我相信Mix2S刷机脚本中的指示有他存在的道理，大概是需要没有分离出内核需要以底包来驱动硬件？推荐是先刷入`MIUI 8.11.15 developer build`作为底包然后再刷入PE。[这是论坛里Mix2S各种官方MIUI下载链接合集](https://www.miui.com/thread-13660832-1-1.html) 注意，刷完底包不要进入MIUI以免Recovery被覆盖为官方Recovery。直接进入Recovery，接着马上刷入PE的包，完成后开机，如果没有遇到问题的话就能成功进入系统了
+
+打包好后就将压缩包再次通过MTP拉到手机当中，或者使用U盘连接到手机上，TWRP选择挂载OTG，选择压缩包，这时候没有了底包版本检测脚本就可以成功刷入了。但是就是不知道不刷底包能否成功刷入PE。（舍友的小米Note3刷PE的时候，我看了下`update-script`文件，发现并没有类似的几行检测脚本。所以我相信Mix2S刷机脚本中的指示有他存在的道理，大概是需要没有分离出内核需要以底包来驱动硬件？~~推荐是先刷入`MIUI 8.11.15 developer build`作为底包然后再刷入PE。[这是论坛里Mix2S各种官方MIUI下载链接合集](https://www.miui.com/thread-13660832-1-1.html)~~
+
+**2019.2.9追加段落：** 底包对于刷机来说是相当必要的，个人理解是底包含有驱动方面的信息。它不是ROM或OTA包，它是一组低级驱动程序，它包括调制解调器，蓝牙，Bootloader，DSP等各种东西。如果原刷机包没有包含相关文件，就需要自己手动刷入。而关于小米手机的底包提取，我在GitHub上面找到了一个十分实用的项目。[XiaomiFirmwareUpdater@GitHub By yshalsager](https://github.com/XiaomiFirmwareUpdater/mi-firmware-updater) & [底包下载源](https://basketbuild.com/devs/yshalsager/Xiaomi-Firmware)
+
+这里的底包仅仅提取了重要的部分，不用再像原来那样需要刷入几百M的开发版包作为底包了。可以说是十分方便了。
+
+>由于并不是每个人都有能力和时间自己提取底包，通常的解决方案，一是完整刷回最新版本MIUI再刷回类原生ROM，二是求助于万能的各大论坛，等待网友放出最新底包。前者由于需要清除手机数据，备份及刷机过程会浪费大量的时间；后者由于小米机型众多或是发贴者的各种问题，往往更新不及时，甚至找不到底包。XDA上的程序猿yshalsager深有其感，于是决定自己拯救世界。Xiaomi Firmware Updater应运而生。这个工具能够每周自动下载几十款小米手机最新的MIUI完整包，提取其中的底包升级部分，生成能够自动安装的卡刷包，同时上传到共享网盘，供大（懒）家（人）直接下载使用。（此段内容来源已经无法追寻）
+
+>XDA上的程序猿yshalsager深有其感，于是决定自己拯救世界。Xiaomi Firmware Updater应运而生。这个工具能够每周自动下载几十款小米手机最新的MIUI完整包，提取其中的底包升级部分，生成能够自动安装的卡刷包，同时上传到共享网盘，供大（懒）家（人）直接下载使用。
+
+注意，**刷完底包不要马上进入MIUI**以免Recovery被覆盖为官方Recovery。直接进入Recovery，接着马上刷入PE的包，完成后开机，如果没有遇到问题的话就能成功进入系统了
+
 晒一下开机动画，这张壁纸被我换了，原壁纸并不是这个。
 
 ![Boot](http://ww1.sinaimg.cn/large/007i8nDUgy1fy7bslv83eg308w08wu0y.gif)
