@@ -38,7 +38,7 @@ community/fcitx-qt5 1.2.3-5 (fcitx-im) [installed]
 一般来说，我们还需要图形界面的configure tool。所以这里我们再将configure tool也装上`$ sudo pacman -S fcitx-configtool`
 
 ## 安装输入法引擎
-推荐使用谷歌拼音输入法引擎**fcitx-googlepinyin**和中州韵输入法**fctix-rime**。
+推荐使用谷歌拼音输入法引擎**fcitx-googlepinyin**和中州韵输入法**fcitx-rime**。
 `$ sudo pacman -S <输入法引擎>`
 
 谷歌拼音是从Android系统上面移植过来的一个引擎。很简单，啥都没有，安装体积小大概是他的优势吧。
