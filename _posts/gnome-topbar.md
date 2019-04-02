@@ -19,6 +19,8 @@ thumbnail:
 
 下载到本地后解压，在解压后的目录中运行命令`make install`
 
+下面是log
+
 ```bash
 [adam@mibookpro Gnome]$ make install
 glib-compile-schemas schemas

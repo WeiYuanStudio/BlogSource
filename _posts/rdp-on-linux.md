@@ -29,11 +29,9 @@ rdesktop -g <分辨率> -u <用户名> -p <密码> <服务器地址>
 
 >rdesktop ERROR: CredSSP: Initialize failed, do you have correct kerberos tgt initialized ? Failed to connect, CredSSP required by server
 
-## 参数参考
->-u <username>
->Username for authentication on the server.
--n <hostname>
-Client hostname. Normally rdesktop automatically obtains the hostname of the client.
+![](https://ws1.sinaimg.cn/large/007i8nDUgy1g1jxqj08o9j30q10m7q4y.jpg)
+
+去掉“仅允许使用网络级别身份验证的远程桌面的计算机连接”勾选
 
 ---
 **参考资料**
