@@ -2,12 +2,12 @@
 title: 关于我
 date: 2019-01-17 21:51:27
 ---
-现就读于JLUZH的一名大一学生，专业是软件工程。
+现就读于JLUZH大一，专业是软件工程。
 喜欢Google，Apple。讨厌Micro$oft。
 
-**Editor:** VS Code & HBuilder X & Atom
+**Editor:** VS Code & Sublime & VIM
 
-**IDE:** Code::Blocks & IDEA & CLion & WebStorm (JetBrians大法好！)
+**IDE:** IDEA & CLion & WebStorm (JetBrians大法好！)
 
 **技能树:** C++ & JAVA & HTML & CSS & MarkDown
 
@@ -23,4 +23,4 @@ date: 2019-01-17 21:51:27
 
 **IM:** Hibikie@Telegram
 
-**Mail:** <a target="_blank" href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email=rp_en5mZm52dn5bu39_AzcHD" style="text-decoration:none;">戳这里发邮件给我</a>
+**Mail:** <a target="_blank" href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email=rp_en5mZm52dn5bu39_AzcHD" style="text-decoration:none;">戳这里发邮件联系我</a>
