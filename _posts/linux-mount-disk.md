@@ -58,6 +58,7 @@ I/O 大小(最小/最佳)：512 字节 / 512 字节
 >`#umount /dev/sdx1`
 ## 查看需要挂载的分区的UUID
 运行`$ sudo blkid`
+
 ```bash
 [sudo] weiyuan 的密码：
 /dev/nvme0n1: PTUUID="661baeed" PTTYPE="dos"
@@ -65,12 +66,17 @@ I/O 大小(最小/最佳)：512 字节 / 512 字节
 /dev/nvme0n1p2: UUID="X-X-X-X-X" TYPE="swap" PARTUUID="661baeed-02"
 /dev/sda1: UUID="X-X-X-X-X" TYPE="ext4" PARTUUID="ce24edc0-01"
 ```
+
 为了避免可能会存在的隐私泄漏风险。故将UUID码掉处理。
 记下需要挂载分区的UUID，复制此UUID，并修改`/etc/fstab`文件。
 比如我想将该分区挂载到根目录下的/disk2。可以按照如下填写。
+
 ```
 UUID=XXXXXXXX /disk2 ext4 defaults 0
 ```
+
+需要注意的一点，如果是**MBR分区表**的话，即**Disklabel type:dos**这种情况下，**Disk identifier**的格式会与GPT分区表有所不同，是0x47**ea32这样的格式
+
 ![](https://ws1.sinaimg.cn/large/007i8nDUgy1fzd1f3mlmwj30vi0ewta6.jpg)
 Reboot，然后你应该能看见磁盘正常挂载了。
 
