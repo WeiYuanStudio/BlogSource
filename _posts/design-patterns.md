@@ -81,3 +81,42 @@ Adapter模式的主人公。使用Adaptee角色的方法来满足Target角色的
 
 # Template Method 模式
 
+父类中定义处理流程的框架，子类中实现具体处理的模式
+
+着眼于：
+ - 在子类中可以调用父类中调用的方法
+ - 可以通过在子类中增加方法以实现新的功能
+ - 在子类中重写父类方法可以改变程序行为
+ - 期待子类去实现抽象方法
+ - 要求子类去实现父类方法
+ - 在抽象类中决定处理的流程十分重要
+
+# Factory Method 模式
+
+Factory 有工厂的意思，用Template Method模式来构建生成实例的工厂，这就是Factory Method.
+
+## Product 产品
+
+属于框架方，是一个抽象类，定义了Factory Method中生成的那些实例所持有的接口，但具体的处理由子类实现。
+
+## Creator 创建者
+
+属于框架方，负责生成Product角色的抽象类，不用new关键字来生成实例，**而是调用生成实例的专用方法来生成实例**，由子类实现该方法，防止父类与其他具体类耦合
+
+## ConcreteProduct
+
+具体加工方
+
+## ConcreteCreator
+
+具体加工方
+
+# Singleton
+
+确保只生成一个实例的模式被称作Singleton模式
+
+## Singleton
+
+在Singleton模式下，只有Singleton一个角色，内含一个可以返回唯一实例的static方法。
+
+***为了防止不小心使用构造方法，将Singleton内的构造方法设为private，不允许其他类调用Singleton的构造方法**
