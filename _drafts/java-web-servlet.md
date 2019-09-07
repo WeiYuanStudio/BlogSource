@@ -17,7 +17,7 @@ tags:
 
 去图书馆借了本一看名字就很“实用”的书。于是就有了下面的故事
 
-感想：vim等一众editor固然是仙器，但是让你做一遍J2EE Web开发，仙都搞不定好吗，那万恶的web.xml配置文件，谁来试试背这个模板，还有，maven等项目构建工具都还没上，再加上近几年前端也走向工具构建，什么webpack啊，Orz，看又看不懂，敢随便动配置文件分分钟炸毛给你看~~虽然说到企业也很大可能只是照着别人画好的框架填代码，根本没有碰这些东西的机会就是了~~
+感想：vim等一众editor固然是仙器，但是让你做一遍J2EE Web开发，仙都搞不定好吗，那万恶的web.xml配置文件，谁来试试背这个模板，还有，maven等项目构建工具都还没上，再加上近几年前端也走向工具构建，什么webpack啊，Orz，看又看不懂，敢随便动配置文件分分钟炸毛给你看 ~~虽然说到企业也很大可能只是照着别人画好的框架填代码，根本没有碰这些东西的机会就是了~~
 
 <!--more-->
 
@@ -61,7 +61,7 @@ TomCat用的是Choco包管理器安装。安装完毕后，已经自动配置了
          version="4.0">
 </web-app>
 ```
-如果需要将一个url路由到某个继承了Servlet的类的话，可以在这个xml文件中的**web-app**tag中加入**servlet**和**servlet-mapping**tag
+如果需要将一个url路由到某个继承了Servlet的类的话，可以在这个xml文件中的**web-app**tag中加入**servlet**和**servlet-mapping**tag，IDE貌似也有相关的向导可以自动添加tag
 
 示范如下
 ```xml
@@ -74,6 +74,57 @@ TomCat用的是Choco包管理器安装。安装完毕后，已经自动配置了
    <url-pattern>/user</url-pattern>
 </servlet-mapping>
 ```
+从Java EE5开始，还可以为一个servlet-name设置多个url了
+
 当访问`http://host.com/user`这样的url时，就会路由到club.piclight.JavaWeb.UserPage这个已经继承了Servlet的类
 
 在我写这一段的时候，我发现还有一个不需要修改web.xml配置文件以达到mapping的方法————在继承了Servlet的类中class声明前加入**WebServlet注解**，例如`@WebServlet(name = "UserPage", urlPatterns = "/user")`这样。当然还有很多选项，IDE会很方便的给出提示。
+
+# 配置web.xml中init-param的以配置参数
+
+在文件web.xml -> web.app(tag) -> servlet(tag)中添加init-param(tag)
+
+示范
+```xml
+<init-param>
+   <param-name>adminName</param-name>
+   <param-value>Linus</param-value>
+</init-param>
+```
+接着在Servlet类中使用`getInitParameter("adminName")`即可得到Linus(value)。**注意，这个是配置文件的参数，与HTTP网络请求的参数没有关系** ~~被书误导了~~
+
+# 配置web.xml中context-param以达到全局效果
+
+由于init-param tag内嵌于servlet tag,所以仅能被当前servlet访问，如果想做到全局访问，可以使用web.app(tag) -> context-param(tag)
+
+示范
+```xml
+<context-param>
+   <param-name>adminName</param-name>
+   <param-value>Linux</param-value>
+</context-param>
+```
+这时候想要访问该参数需要在`getInitParameter("adminName")`修改为`getServletContext().getInitParameter("adminName")`
+
+# 资源注射(@Resource)
+
+该项注解功能在我的Windows开发环境下无法正常使用编译，暂时放一放。使用了资源注入，Tomecat启动时会将web.xml里面的配置信息主动注射到Servlet里。
+
+例如
+```Java
+@Resource(name="messageName")
+private String message;
+
+OR
+
+private @Resource(name="messageName") String message;
+```
+```xml
+    <env-entry>
+        <env-entry-name>messageName</env-entry-name>
+        <env-entry-type>String</env-entry-type>
+        <env-entry-value>Hello World</env-entry-value>
+    </env-entry>
+```
+
+资源注射的原理是JNDI，（Java命名与目录接口）
