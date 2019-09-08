@@ -18,6 +18,7 @@ tags:
 去图书馆借了本一看名字就很“实用”的书。于是就有了下面的故事
 
 感想：
+
 1. vim等一众editor固然是仙器，但是让你做一遍J2EE Web开发，仙都搞不定好吗，那万恶的web.xml配置文件，谁来试试背这个模板，还有，maven等项目构建工具都还没上，再加上近几年前端也走向工具构建，什么webpack啊，Orz，看又看不懂，敢随便动配置文件分分钟炸毛给你看 ~~虽然说到企业也很大可能只是照着别人画好的框架填代码，根本没有碰这些东西的机会就是了~~
 
 2. 体会到了之前大佬们的说法。随着计算机学科的壮大，越来越细的分工，底层的封装。开发时越是看不到底层，越是迷迷糊糊。各种令人头晕目眩的工具链，构建工具，脚手架。开发时修改配置文件无从下手，遇到问题很难自己解决。
@@ -53,9 +54,20 @@ TomCat用的是Choco包管理器安装。安装完毕后，已经自动配置了
 
 一步一步接着走IDE就帮你构建好一个项目了。
 
+在IDEA中，项目结构是这样的
+
+- out
+- src
+  - club.piclight.JavaWeb
+- web
+  - WEB-INF
+    - web.xml
+  - index.jsp
+
 # 配置web.xml以路由url
 
 如下是IDE自动构建的web.xml文件，位于WEB-INF目录中
+
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
@@ -267,9 +279,80 @@ if (req.getParameter("target").equals("welcome")) {
             dispatcher.forward(req, resp);
 }
 ```
+
 在写这一段代码的时候，我注意到一个问题。当前开发环境是Windows环境，路径`/WEB-INF/welcome.html`是不符合Windows的文件系统的`\`反斜杠的。但是部署到服务器上，服务器可能是Linux系统，那么到底应该怎么写才是规范的呢？我尝试了`/WEB-INF/welcome.html`以及`\\WEB-INF\\welcome.html`（注意转义字符问题，需要双反斜杠）。重新编译之后，发现都能在Windows环境下的Tomcat运行，并正常相应请求。
 
 思考了一下，因为主流部署平台以及tomcat的开源特性以及书写时转移符反斜杠带来的麻烦问题，个人还是觉得不要使用反斜杠
 
 ## Redirect 重定向
 
+重定向是利用服务器返回状态码来实现的。301和302分别是永久与临时重定向。
+
+代码示范
+
+```Java
+repsonse.setStatus(HttpServletResponse.SC_MOVED_TEMPORARLIRY);
+response.setHeader("Location", "https://RedirectURL");
+```
+
+更多的玩法，可以参考HTTP协议。各种状态码和Header的组合
+
+## Servlet线程安全
+
+Servlet只会有**一个实例**，如果有多个用户同时请求同一个Servlet的时候，Tomcat派生出多条线程执行Servlet的代码。
+
+Servlet不是线程安全的，多线程的**并发读写**会导致数据的**不同步**问题。解决方式是尽量**不要定义name属性于类**中，定义在doGet()或者doPost()方法中。
+
+虽然使用synchronized(name){}可以解决问题，但是会造成**线程的等待，阻塞**
+
+# JSP介绍
+
+JSP，全名Java Server Page, JSP在执行是会被Tomcat编译，经过观察，发现启动Tomcat后可以找到相应的JSP解释后的.java文件，还有编译后的.class文件
+
+使用IDEA创建了一个JSP文件到web目录下
+
+```jsp
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+</html>
+```
+
+> 在EE 5 规范中，当整个Web应用只有html和jsp文件时，部署时可以不需要web.xml。Tomcat6 中就不再需要web.xml。
+
+关于JSP的生命周期，JSP也是Servlet，运行时和Servlet一样只有一个实例，也有init()和destroy()方法。除此之外，JSP还有自己的_jspInit()和_jspDestory()方法
+
+JSP源码可以分为两部分，**模板数据**与**元素**。**模板**就是指JSP中的HTML代码，无论如何都不会改变输出。**元素**指的是JSP中的Java部分，包括脚本（Scriptlet，也就是JSP中的Java代码），JSP指令(Direcitive), 以及JSP标签
+
+## JSP语法
+
+### JSP脚本
+
+JSP脚本必须使用`<%`和`%>`包围，否则视为模板数据。中间部分的语法必须符合Java语法，否则会发生编译错误。
+
+### JSP输出
+
+在Java Servlet中使用out.println()方法进行输出，在JSP中不仅可以使用这种方法进行输出，还可以使用JSP的输出语法
+
+```jsp
+<%= num %>
+```
+
+### JSP注释
+
+在JSP中不仅可以使用Java注释，还可以使用JSP注释语法
+
+```jsp
+<%--
+
+--%>
+```
+
+## JSP全局变量
+
+JSP可以声明全局变量，但是不能直接在`<%`和`%>`中之间声明。`<%!`和`%>`
