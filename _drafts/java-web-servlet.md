@@ -66,12 +66,12 @@ TomCat用的是Choco包管理器安装。安装完毕后，已经自动配置了
 示范如下
 ```xml
 <servlet>
-   <servlet-name>UserPage</servlet-name>
-   <servlet-class>club.piclight.JavaWeb.UserPage</servlet-class>
+    <servlet-name>UserPage</servlet-name>
+    <servlet-class>club.piclight.JavaWeb.UserPage</servlet-class>
 </servlet>
 <servlet-mapping>
-   <servlet-name>UserPage</servlet-name>
-   <url-pattern>/user</url-pattern>
+    <servlet-name>UserPage</servlet-name>
+    <url-pattern>/user</url-pattern>
 </servlet-mapping>
 ```
 从Java EE5开始，还可以为一个servlet-name设置多个url了
@@ -87,8 +87,8 @@ TomCat用的是Choco包管理器安装。安装完毕后，已经自动配置了
 示范
 ```xml
 <init-param>
-   <param-name>adminName</param-name>
-   <param-value>Linus</param-value>
+    <param-name>adminName</param-name>
+    <param-value>Linus</param-value>
 </init-param>
 ```
 接着在Servlet类中使用`getInitParameter("adminName")`即可得到Linus(value)。**注意，这个是配置文件的参数，与HTTP网络请求的参数没有关系** ~~被书误导了~~
@@ -100,8 +100,8 @@ TomCat用的是Choco包管理器安装。安装完毕后，已经自动配置了
 示范
 ```xml
 <context-param>
-   <param-name>adminName</param-name>
-   <param-value>Linux</param-value>
+    <param-name>adminName</param-name>
+    <param-value>Linux</param-value>
 </context-param>
 ```
 这时候想要访问该参数需要在`getInitParameter("adminName")`修改为`getServletContext().getInitParameter("adminName")`
@@ -109,6 +109,8 @@ TomCat用的是Choco包管理器安装。安装完毕后，已经自动配置了
 # 资源注射(@Resource)
 
 该项注解功能在我的Windows开发环境下无法正常使用编译，暂时放一放。使用了资源注入，Tomecat启动时会将web.xml里面的配置信息主动注射到Servlet里。
+
+*Java EE 5与 Tomcat6 以上才支持注解*
 
 例如
 ```Java
@@ -127,4 +129,84 @@ private @Resource(name="messageName") String message;
     </env-entry>
 ```
 
-资源注射的原理是JNDI，（Java命名与目录接口）
+资源注射的原理是JNDI，（Java命名与目录接口）如果不使用注解注入的话，还可以这样获取到这三个资源
+示范
+```Java
+Context context = new InitialContext();
+String message = (String)context.lookup.("messageName")
+```
+
+实验用例
+```Java
+Context context = null;
+String infoString = null;
+try {
+   context = new InitialContext();
+   infoString = (String) context.lookup("UserInfo");
+} catch (NamingException e) {
+   e.printStackTrace();
+}
+out.println("Info:" + infoString);
+```
+> 实验失败，Tomcat命令行log: javax.naming.NameNotFoundException: Name [UserInfo] is not bound in this Context. Unable to find [UserInfo]. 页面为null
+
+# HTTP请求
+
+## GET Method
+
+以下是一个简单的表单请求的html示范
+```html
+<form action="/url" method="get">
+    <input type="text" name="info">
+    <input type="submit">
+</form>
+```
+
+在servlet类中调用HttpServletResponse对象的getParameter("key")方法会返回GET请求中key所对应的value
+以下为servlet类中调用GET请求的参数示范
+```Java
+protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setCharacterEncoding("UTF-8");
+        resp.setCharacterEncoding("UTF-8");
+        resp.setContentType("text/html");
+
+        PrintWriter out = resp.getWriter();
+        out.println("Info=" + req.getParameter("info"));
+    }
+```
+
+action为请求URL参数，实际请求时会请求至`主域 + /url`这样子，method为请求方式，name中的info作为post请求的键值名(key)，与input text框中的数据作为数据(value)一起传送。以GET方法提交数据时，浏览器会把表单内容组织成一个查询字符串并加载URL+?后面。各个变量之间以&分隔，GET请求适用于查询。
+
+## POST Method
+
+以下是一个简单的表单请求的html示范
+```html
+<form action="/url" method="post">
+    <input type="text" name="infoA">
+    <input type="text" name="infoB">
+    <input type="submit">
+</form>
+```
+
+在servlet类中调用HttpServletResponse对象的getParameter("key")方法会返回GET请求中key所对应的value
+以下为servlet类中调用POST请求的参数示范
+```Java
+protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setCharacterEncoding("UTF-8");
+        resp.setCharacterEncoding("UTF-8");
+        resp.setContentType("text/html");
+
+        PrintWriter out = resp.getWriter();
+        out.println("Info=" + req.getParameter("infoA"));
+        out.println("Info=" + req.getParameter("infoB"));
+    }
+```
+
+
+## Encoding编码问题
+
+如果查询内容中有中文字符，务必注意Tomcat上Encoding的设置。如果出现意外，最好在server.xml将Encoding设置为UTF-8
+
+```xml
+<Connector port="8080" protocol="HTTP/1.1" connectionTimeout="20000" redirectProt="8443" URIEncoding="UTF-8"/>
+```
