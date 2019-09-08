@@ -179,6 +179,8 @@ action为请求URL参数，实际请求时会请求至`主域 + /url`这样子�
 
 ## POST Method
 
+与GET Method十分相似
+
 以下是一个简单的表单请求的html示范
 ```html
 <form action="/url" method="post">
@@ -210,3 +212,28 @@ protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws S
 ```xml
 <Connector port="8080" protocol="HTTP/1.1" connectionTimeout="20000" redirectProt="8443" URIEncoding="UTF-8"/>
 ```
+
+# 关于Servlet生命周期的简单讨论
+
+在CGI编程中，用户每一次请求CGI程序时，都会开辟一个独立的进程处理该请求，完成请求后销毁。效率相对较低
+
+Servlet解决了这个问题，服务器会在启动时（若load-on-startup为1）或者是用户第一次请求时（若load-on-startup为0）才初始化一个Servlet对象。当服务器关闭时销毁这个Servlet对象。
+
+load-on-startup (tag)，位于web.xml -> web-app(tag) -> servlet(tag)中
+
+**init(ServletConfig config)** 当第一次加载Servlet时会调用该方法
+
+**Service(ServletRequest req, ServletResponse resp)** 客户端每次请求Servlet时都会调用该方法，该方法会判断访问类型，根据HttpServletRequest的getMethod()方法来判断执行doGet()还是doPost()方法
+
+**destory()** 当Servlet要结束生命周期时会执行，容器关闭时执行
+
+根据上文，可以将初始化资源放入init()方法中，销毁资源放入destory()方法中，以提高性能。
+
+## 生命期注解
+
+从Java EE 5 开始支持@PostConstruct与@PreDestroy注解，这两个注解可以修饰一个**非静态方法**的**void**方法，而且该方法**不能有抛出异常声明**
+
+**PostConstruct注解** 标注的方法运行于Servlet构造方法之后，init()方法之前。
+
+**PreDestroy注解** 标注的方法运行于destory()方法之后，之后服务器卸载服务完毕
+
