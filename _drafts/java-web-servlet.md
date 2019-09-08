@@ -17,7 +17,10 @@ tags:
 
 去图书馆借了本一看名字就很“实用”的书。于是就有了下面的故事
 
-感想：vim等一众editor固然是仙器，但是让你做一遍J2EE Web开发，仙都搞不定好吗，那万恶的web.xml配置文件，谁来试试背这个模板，还有，maven等项目构建工具都还没上，再加上近几年前端也走向工具构建，什么webpack啊，Orz，看又看不懂，敢随便动配置文件分分钟炸毛给你看 ~~虽然说到企业也很大可能只是照着别人画好的框架填代码，根本没有碰这些东西的机会就是了~~
+感想：
+1. vim等一众editor固然是仙器，但是让你做一遍J2EE Web开发，仙都搞不定好吗，那万恶的web.xml配置文件，谁来试试背这个模板，还有，maven等项目构建工具都还没上，再加上近几年前端也走向工具构建，什么webpack啊，Orz，看又看不懂，敢随便动配置文件分分钟炸毛给你看 ~~虽然说到企业也很大可能只是照着别人画好的框架填代码，根本没有碰这些东西的机会就是了~~
+
+2. 体会到了之前大佬们的说法。随着计算机学科的壮大，越来越细的分工，底层的封装。开发时越是看不到底层，越是迷迷糊糊。各种令人头晕目眩的工具链，构建工具，脚手架。开发时修改配置文件无从下手，遇到问题很难自己解决。
 
 <!--more-->
 
@@ -236,4 +239,37 @@ load-on-startup (tag)，位于web.xml -> web-app(tag) -> servlet(tag)中
 **PostConstruct注解** 标注的方法运行于Servlet构造方法之后，init()方法之前。
 
 **PreDestroy注解** 标注的方法运行于destory()方法之后，之后服务器卸载服务完毕
+
+# Servlet的转发与重定向
+
+开始之间，先学习一下容易弄混的两个名词
+
+>**forward（转发）：**
+>
+>是服务器请求资源,服务器直接访问目标地址的URL,把那个URL的响应内容读取过来,然后把这些内容再发给浏览器.浏览器根本不知道服务器发送的内容从哪里来的,因为这个跳转过程实在服务器实现的，并不是在客户端实现的所以客户端并不知道这个跳转动作，所以它的地址栏还是原来的地址  
+>**redirect（重定向）：**
+>
+>是服务端根据逻辑,发送一个状态码（比如302（临时重定向，301永久重定向））,告诉浏览器重新去请求那个地址.所以地址栏显示的是新的URL.
+
+简单地说，**转发**仅仅是是**服务端的行为，客户端不可见、透明**，而**重定向是客户端执行**的行为。
+
+放置在每个站点项目下的WEB-INF中的文件是受到保护的，如果在该目录中有需要让外部访问的文件。可以使用Servlet的Forward，Forward不仅可以转发到Servlet, JSP文件，还可以转发至html文件，甚至是WEB-INF下的文件
+
+## Forward 转发
+
+**Forward**是通过**RequestDispatched**对象的**forward(ServletRequest request, ServletResponse response)**方法实现的。RequestDispatched对象可以通过HttpServletRequest的getRequestDispatched得到
+
+代码示范 当请求键值target的参数为welcome时，重定向到站点目录下的WEB-INF下的welcome.html
+
+```Java
+if (req.getParameter("target").equals("welcome")) {
+            RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/welcome.html");
+            dispatcher.forward(req, resp);
+}
+```
+在写这一段代码的时候，我注意到一个问题。当前开发环境是Windows环境，路径`/WEB-INF/welcome.html`是不符合Windows的文件系统的`\`反斜杠的。但是部署到服务器上，服务器可能是Linux系统，那么到底应该怎么写才是规范的呢？我尝试了`/WEB-INF/welcome.html`以及`\\WEB-INF\\welcome.html`（注意转义字符问题，需要双反斜杠）。重新编译之后，发现都能在Windows环境下的Tomcat运行，并正常相应请求。
+
+思考了一下，因为主流部署平台以及tomcat的开源特性以及书写时转移符反斜杠带来的麻烦问题，个人还是觉得不要使用反斜杠
+
+## Redirect 重定向
 
