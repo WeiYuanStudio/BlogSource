@@ -408,6 +408,46 @@ JSP指令用于声明JSP页面中的属性，格式为`<%@ directive {attribute=
 
 从runoob抄了一个Table过来~ ~~Turn HTML Table to Markdown真的好用，逃~~
 
+### JSP的include指令
+
+include指令只有一种格式。
+
+```jsp
+<%@ include file="relativeURL"%>
+```
+
+例如需要为页面增加统一的页眉页脚，即可用这种方式添加。
+
+还有一种方法实现同样的效果，include行为，它使用request.getRequestDispatcher("URI").forward(requst, response)来执行被包含文件
+
+```jsp
+<jsp:include page="relativeURI">
+```
+
+这两者的不同之处是，前者是在编译的时候将include的页面编译到一起。而后者是分开编译，执行时将结果合并
+
+**include指令是先包含后编译，include行为是先运行后包含。**
+
+### JSP的taglib指令
+
+JSP标签技术，使用标签功能实现视图代码重用。
+
+```jsp
+<%@ taglib uri="类库地址" prefix="prefixOfTag" %>
+```
+
+#### 关于JSP指令前后导致的网页换行问题
+
+JSP2.1加入了新属性**trimDirectiveWhitespaces** 默认值为false。若开启，则会自动忽略JSP前后带来的空白字符
+
+尽管HTML中空行不影响浏览器里的显示效果。浏览器依然能解析页面，但是如果输出的是XML，可能会出现某些问题，**有的XML解析器不允许空行的出现**。
+
+# JSP行为
+
+标准的JSP行为格式为`<jsp:elements {attribute="value"}* />`
+
+
+
 ### 记录我遇到的问题
 
 不推荐在JSP页面试图使用response的writer，或者outputStream。会出现谜之问题
