@@ -27,7 +27,7 @@ tags:
 
 # 安装环境
 
-安装JDK以及IDE（本人选用IDEA EDU授权版本，支持JavaEE开发），服务端选择TomCat9
+安装JDK以及IDE（本人选用IDEA EDU授权版本，支持JavaEE开发），服务端选择TomCat9。调试工具方面，推荐使用 Firefox 或者 Google Chrome浏览器，当然一个HTTP调试工具也是十分需要的，这里推荐使用 PostMan。
 
 ## Windows安装Tomcat9
 TomCat用的是Choco包管理器安装。安装完毕后，已经自动配置了环境环境变量。命令行`tomcat9`就可以启动了。
@@ -76,9 +76,11 @@ TomCat用的是Choco包管理器安装。安装完毕后，已经自动配置了
          version="4.0">
 </web-app>
 ```
+
 如果需要将一个url路由到某个继承了Servlet的类的话，可以在这个xml文件中的**web-app**tag中加入**servlet**和**servlet-mapping**tag，IDE貌似也有相关的向导可以自动添加tag
 
 示范如下
+
 ```xml
 <servlet>
     <servlet-name>UserPage</servlet-name>
@@ -89,6 +91,7 @@ TomCat用的是Choco包管理器安装。安装完毕后，已经自动配置了
     <url-pattern>/user</url-pattern>
 </servlet-mapping>
 ```
+
 从Java EE5开始，还可以为一个servlet-name设置多个url了
 
 当访问`http://host.com/user`这样的url时，就会路由到club.piclight.JavaWeb.UserPage这个已经继承了Servlet的类
@@ -100,12 +103,14 @@ TomCat用的是Choco包管理器安装。安装完毕后，已经自动配置了
 在文件web.xml -> web.app(tag) -> servlet(tag)中添加init-param(tag)
 
 示范
+
 ```xml
 <init-param>
     <param-name>adminName</param-name>
     <param-value>Linus</param-value>
 </init-param>
 ```
+
 接着在Servlet类中使用`getInitParameter("adminName")`即可得到Linus(value)。**注意，这个是配置文件的参数，与HTTP网络请求的参数没有关系** ~~被书误导了~~
 
 # 配置web.xml中context-param以达到全局效果
@@ -113,21 +118,22 @@ TomCat用的是Choco包管理器安装。安装完毕后，已经自动配置了
 由于init-param tag内嵌于servlet tag,所以仅能被当前servlet访问，如果想做到全局访问，可以使用web.app(tag) -> context-param(tag)
 
 示范
+
 ```xml
 <context-param>
     <param-name>adminName</param-name>
     <param-value>Linux</param-value>
 </context-param>
 ```
+
 这时候想要访问该参数需要在`getInitParameter("adminName")`修改为`getServletContext().getInitParameter("adminName")`
 
 # 资源注射(@Resource)
 
-该项注解功能在我的Windows开发环境下无法正常使用编译，暂时放一放。使用了资源注入，Tomecat启动时会将web.xml里面的配置信息主动注射到Servlet里。
-
-*Java EE 5与 Tomcat6 以上才支持注解*
+该项注解功能在我的Windows开发环境下无法正常使用编译，暂时放一放。使用了资源注入，Tomecat启动时会将web.xml里面的配置信息主动注射到Servlet里。*Java EE 5与 Tomcat6 以上才支持注解*
 
 例如
+
 ```Java
 @Resource(name="messageName")
 private String message;
@@ -136,22 +142,25 @@ OR
 
 private @Resource(name="messageName") String message;
 ```
+
 ```xml
-    <env-entry>
-        <env-entry-name>messageName</env-entry-name>
-        <env-entry-type>String</env-entry-type>
-        <env-entry-value>Hello World</env-entry-value>
-    </env-entry>
+<env-entry>
+    <env-entry-name>messageName</env-entry-name>
+    <env-entry-type>String</env-entry-type>
+    <env-entry-value>Hello World</env-entry-value>
+</env-entry>
 ```
 
 资源注射的原理是JNDI，（Java命名与目录接口）如果不使用注解注入的话，还可以这样获取到这三个资源
 示范
+
 ```Java
 Context context = new InitialContext();
 String message = (String)context.lookup.("messageName")
 ```
 
 实验用例
+
 ```Java
 Context context = null;
 String infoString = null;
@@ -163,6 +172,7 @@ try {
 }
 out.println("Info:" + infoString);
 ```
+
 > 实验失败，Tomcat命令行log: javax.naming.NameNotFoundException: Name [UserInfo] is not bound in this Context. Unable to find [UserInfo]. 页面为null
 
 # HTTP请求
@@ -170,6 +180,7 @@ out.println("Info:" + infoString);
 ## GET Method
 
 以下是一个简单的表单请求的html示范
+
 ```html
 <form action="/url" method="get">
     <input type="text" name="info">
@@ -179,6 +190,7 @@ out.println("Info:" + infoString);
 
 在servlet类中调用HttpServletResponse对象的getParameter("key")方法会返回GET请求中key所对应的value
 以下为servlet类中调用GET请求的参数示范
+
 ```Java
 protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
@@ -197,6 +209,7 @@ action为请求URL参数，实际请求时会请求至`主域 + /url`这样子�
 与GET Method十分相似
 
 以下是一个简单的表单请求的html示范
+
 ```html
 <form action="/url" method="post">
     <input type="text" name="infoA">
@@ -207,6 +220,7 @@ action为请求URL参数，实际请求时会请求至`主域 + /url`这样子�
 
 在servlet类中调用HttpServletResponse对象的getParameter("key")方法会返回GET请求中key所对应的value
 以下为servlet类中调用POST请求的参数示范
+
 ```Java
 protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
@@ -218,7 +232,6 @@ protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws S
         out.println("Info=" + req.getParameter("infoB"));
     }
 ```
-
 
 ## Encoding编码问题
 
@@ -353,6 +366,58 @@ JSP脚本必须使用`<%`和`%>`包围，否则视为模板数据。中间部分
 --%>
 ```
 
-## JSP全局变量
+### JSP全局变量
 
-JSP可以声明全局变量，但是不能直接在`<%`和`%>`中之间声明。`<%!`和`%>`
+JSP可以声明全局变量，以及方法。但是不能直接在`<%`和`%>`中之间声明。`<%!`和`%>`
+
+### JSP的if，for语句
+
+JSP中同样可以使用if语句。if语句中可以包含大段的HTML代码，如果if，for语句块中包含HTML。则语句块前后的大括号绝对不能省略。
+
+### JSP的return
+
+如果遇到JSP页面需要中途停止，可以直接调用return结束该页的输出。
+
+### JSP指令
+
+JSP指令用于声明JSP页面中的属性，格式为`<%@ directive {attribute=value} %>`
+
+```jsp
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+```
+
+该指令中directive位置为page，因此该指令为page指令。该指令包含language和contentType两个属性，注意，**import属性除外，任何page允许的属性都只能出现一次**，否则会出现编译错误。
+
+常见的指令还有page,taglib,include等等
+
+|属性|描述|
+|--- |--- |
+|buffer|指定out对象使用缓冲区的大小|
+|autoFlush|控制out对象的 缓存区|
+|contentType|指定当前JSP页面的MIME类型和字符编码|
+|errorPage|指定当JSP页面发生异常时需要转向的错误处理页面|
+|isErrorPage|指定当前页面是否可以作为另一个JSP页面的错误处理页面|
+|extends|指定servlet从哪一个类继承|
+|import|导入要使用的Java类|
+|info|定义JSP页面的描述信息|
+|isThreadSafe|指定对JSP页面的访问是否为线程安全|
+|language|定义JSP页面所用的脚本语言，默认是Java|
+|session|指定JSP页面是否使用session|
+|isELIgnored|指定是否执行EL表达式|
+|isScriptingEnabled|确定脚本元素能否被使用|
+
+从runoob抄了一个Table过来~ ~~Turn HTML Table to Markdown真的好用，逃~~
+
+### 记录我遇到的问题
+
+不推荐在JSP页面试图使用response的writer，或者outputStream。会出现谜之问题
+
+使用outputStream输出会可能导致这个页面只有outputSteam才能得以输出。我尝试调用了outputStream，发现这会导致页面只有outputStream才有输出。其他的输出全部消失了。
+
+然后尝试去get response的Writer进行输出，发现我放在页面中部的printTable方法所输出的HTTP内容居然比整个JSP页面内的其他模板数据还要早出现。但是查看编译出来的java文件，编译并没有改变JSP内的顺序。我调用的是response里get到的Writer
+
+根据编译出的.java文件配合调试工具，可以看出，页面中只允许一个outputStream或者其他的输出实例。如果出现两个实例的话。将只有最先被调用的那个实例才得以输出。模板数据是通过pageContext里get到的out进行输出的。
+
+```text
+_jspxFactory.getPageContext -> pageContext.getOut -> out
+```
