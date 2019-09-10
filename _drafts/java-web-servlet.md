@@ -446,6 +446,62 @@ JSP2.1加入了新属性**trimDirectiveWhitespaces** 默认值为false。若开�
 
 标准的JSP行为格式为`<jsp:elements {attribute="value"}* />`
 
+## <jsp:include />行为
+
+include行为用于运行时包含某文件。如果被包含的文件为JSP程序，则会先执行JSP程序，并将结果包含起来。
+
+include行为语法为
+
+```jsp
+<jsp:include flush="true" page="/head.jsp"></jsp:include>
+Context
+<jsp:include flush="true" page="/foot.jsp"></jsp:include>
+```
+
+属性page必须，为被包含文件的相对路径。必须为本Web程序内的文件。flush设置读入被保存文件内容时是否清空缓存
+
+## Java Bean(POJO)
+
+Java Bean行为是一组Java Bean相关的行为，包括useBean，setProperty,getProperty行为。
+
+下面为实验例程中的纯html页面部分表单内容，POST请求到jsp页面
+
+```html
+<form action="/URL/person.jsp" method="post">
+    Name:<input type="text" name="name" />
+    Age:<input type="text" name="age" />
+    <input type="submit" value="Send">
+</form>
+```
+
+person.jsp内的内容,jsp行为标签内的id为Bean实例化名，是必填项，在下方页面需要通过该实例名访问Bean。class则是Bean的类名。setProperty行为标签会自动从request里面获取提交的数据，然后赋值给Java Bean属性。property为*意味着将请求中所有属性赋值给Bean。注意，property内只允许一个参数，实测用逗号隔开是行不通的，可以多加一个标签去设置另一个参数。
+
+```jsp
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<jsp:useBean id="person" class="club.piclight.JavaWeb.userBean"/>
+<jsp:setProperty name="person" property="*" />
+<html>
+<head>
+    <title>Title</title>
+</head>
+<body>
+    <table>
+        <tr>
+            <td>Name:</td>
+            <td>
+                <%= person.getName()%>
+            <td/>
+        </tr>
+        <tr>
+            <td>Age:</td>
+            <td>
+                <%= person.getAge()%>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
+```
 
 
 ### 记录我遇到的问题
