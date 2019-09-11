@@ -29,6 +29,18 @@ tags:
 
 安装JDK以及IDE（本人选用IDEA EDU授权版本，支持JavaEE开发），服务端选择TomCat9。调试工具方面，推荐使用 Firefox 或者 Google Chrome浏览器，当然一个HTTP调试工具也是十分需要的，这里推荐使用 PostMan。
 
+## Linux安装Tomcat9
+
+这里使用我个人最喜欢在服务器上部署的Linux发行版debian
+
+首先输入命令`apt install tomcat9`
+
+完成安装后将启动服务加入daemon中`systemctl enable tomcat9`，之后重启
+
+此时访问ip:8080应该可以看到面板启动成功。
+
+然后可以将已经打包好的war文件放到站点目录下，默认装完tomcat后，是放置在`/var/lib/tomcat9/webapps/ROOT/index.html`下的。如果你将打包好的Project.war放到`/var/lib/tomcat9/webapps/`下，重启服务，你会看到项目被自动解压到该目录下了，不过这种带项目名方式，得通过访问`ip:8080/Project`这样的方式进行访问。聪明的方法是将该目录清空，将.war打包文件改为ROOT.war，部署到服务器后重启一下就可以了。
+
 ## Windows安装Tomcat9
 TomCat用的是Choco包管理器安装。安装完毕后，已经自动配置了环境环境变量。命令行`tomcat9`就可以启动了。
 
@@ -594,6 +606,16 @@ Servlet中能通过request.getRequestDispatcher("someServlet").forward("request,
 </body>
 </html>
 ```
+
+## <jsp:directive 行为>
+
+<jsp:directive />行为相当于JSP指令。<jsp:directive.page />相当于<%@ page%>指令，<jsp:directive.include />行为相当于<%@ include />指令
+
+<jsp:directive />行为与JSP指令可以相互改写，他是为XML格式的JSP准备的。推荐使用这种格式
+
+# JSP隐藏对象
+
+Servlet和JSP中输出数据都需要使用out对象，Servlet中的out对象是通过response.getWriter()方法获取的。而JSP中并没有定义out对象，却可以直接使用这是因为out是JSP内置的隐藏对象。JSP中有9种内置对象。out request config session application page pageContext exception
 
 ### 记录我遇到的问题
 
