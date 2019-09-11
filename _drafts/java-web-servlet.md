@@ -462,7 +462,13 @@ Context
 
 ## Java Bean(POJO)
 
-Java Bean行为是一组Java Bean相关的行为，包括useBean，setProperty,getProperty行为。
+Java Bean行为是一组Java Bean相关的行为，包括useBean，setProperty,getProperty行为。Java Bean类简单的来说就是含有多个private字段，以及各个字段的getter()setter()合集在一个类中。
+要注意的是**习惯把boolean类型的属性的getter方法写作isXxx()，而不是getXxx()**
+
+- 提供一个默认的无参构造函数。
+- 需要被序列化并且实现了 Serializable 接口。
+- 可能有一系列可读写属性。
+- 可能有一系列的 getter 或 setter 方法。
 
 下面为实验例程中的纯html页面部分表单内容，POST请求到jsp页面
 
@@ -474,7 +480,13 @@ Java Bean行为是一组Java Bean相关的行为，包括useBean，setProperty,g
 </form>
 ```
 
-person.jsp内的内容,jsp行为标签内的id为Bean实例化名，是必填项，在下方页面需要通过该实例名访问Bean。class则是Bean的类名。setProperty行为标签会自动从request里面获取提交的数据，然后赋值给Java Bean属性。property为*意味着将请求中所有属性赋值给Bean。注意，property内只允许一个参数，实测用逗号隔开是行不通的，可以多加一个标签去设置另一个参数。
+person.jsp内的内容,jsp行为标签内的id为Bean实例化名，是必填项，在下方页面需要通过该实例名访问Bean。class则是Bean的类名。
+
+setProperty行为标签会自动从request里面获取提交的数据，然后赋值给Java Bean属性。property为*意味着将请求中所有属性赋值给Bean。
+
+scope是该Bean的对象范围，当为page时只对该页面有效。当为request时只对当前的request有效（有时候一个jsp页面会嵌套其他jsp页面，forward，include行为贯穿若干个JSP页面），当为session时对当前用户有效，当为application时对当前应用程序有效，默认为page。范围排序是page -> request -> session -> application依次增大。
+
+注意，property内只允许一个参数，实测用逗号隔开是行不通的，可以多加一个标签去设置另一个参数。
 
 ```jsp
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -503,6 +515,85 @@ person.jsp内的内容,jsp行为标签内的id为Bean实例化名，是必填项
 </html>
 ```
 
+### 有关于<jsp:useBean />的 scope实验
+
+以下为实验代码
+
+```jsp
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<jsp:useBean id="count" class="club.piclight.JavaWeb.CountBean" scope="session" />
+<html>
+<head>
+    <title>Hello World</title>
+</head>
+<body>
+    <h1>Hello WeiYuan, Count<%= count.getCountNum()%></h1>
+</body>
+</html>
+```
+
+```java
+package club.piclight.JavaWeb;
+
+public class CountBean {
+    private int countNum = 0;
+
+    public int getCountNum() {
+        return ++countNum;
+    }
+}
+```
+
+当scope设置为page时，每次刷新页面，计数都是1。将scope设置为session时，若浏览器接受cookie的话，即可看见计数的叠加。不同设备之间的计数互不干扰。不论是page还是session若没有设置Cookie的话，第一包过去，响应头都会返回Set-Cookie字段。若设置为application时，所有设备请求的时候，都是共享一个计数器实例。
+
+## <jsp:forward />行为
+
+Servlet中能通过request.getRequestDispatcher("someServlet").forward("request, response")跳转到另一个Servlet或者文件。<jsp:forward />也可以做到。
+
+下面是自己写的一段实验代码。该页面有一个表单，内有两个单选按钮，选择一个按钮后，按下Go按钮提交表单，这会直接提交给当前页面。在当前页面的页首有一段jsp代码判断request里面的param，让页面转发到PlaceA，或者PlaceB页面。这两个页面在WEB-INF文件夹下，getParam一定要做异常处理，不然第一次访问该页没有发送参数。会无法解析param导致jsp运行时错误。无法返回JSP页面下方的html内容
+
+```jsp
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<jsp:useBean id="count" class="club.piclight.JavaWeb.CountBean" scope="application"/>
+<%
+    String Place = null;
+    try {
+        Place = request.getParameter("Place");
+        if (Place.equals("A")) {
+%>
+<jsp:forward page="/WEB-INF/PlaceA.html"/>
+<%
+} else if (Place.equals("B")) {
+%>
+<jsp:forward page="/WEB-INF/PlaceB.html"/>
+<%
+    }
+%>
+<%
+    } catch (NullPointerException e) {
+        e.printStackTrace();
+    } finally {
+    }
+%>
+<html>
+<head>
+    <title>Hello World</title>
+</head>
+<body>
+<h1>Hello WeiYuan, Count <%= count.getCountNum()%>
+</h1>
+<h2>Where You Want To Go ???</h2>
+<h3>Here Are Some Choise</h3>
+<form action="index.jsp" method="post">
+    <div>PlaceA</div>
+    <input type="radio" name="Place" value="A"/>
+    <div>PlaceB</div>
+    <input type="radio" name="Place" value="B"/>
+    <input type="submit" value="Go" class="button"/>
+</form>
+</body>
+</html>
+```
 
 ### 记录我遇到的问题
 
