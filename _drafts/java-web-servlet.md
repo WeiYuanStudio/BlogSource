@@ -29,7 +29,7 @@ tags:
 
 安装JDK以及IDE（本人选用IDEA EDU授权版本，支持JavaEE开发），服务端选择TomCat9。调试工具方面，推荐使用 Firefox 或者 Google Chrome浏览器，当然一个HTTP调试工具也是十分需要的，这里推荐使用 PostMan。
 
-## Linux安装Tomcat9
+## Linux部署Tomcat9
 
 这里使用我个人最喜欢在服务器上部署的Linux发行版debian
 
@@ -41,28 +41,44 @@ tags:
 
 然后可以将已经打包好的war文件放到站点目录下，默认装完tomcat后，是放置在`/var/lib/tomcat9/webapps/ROOT/index.html`下的。如果你将打包好的Project.war放到`/var/lib/tomcat9/webapps/`下，重启服务，你会看到项目被自动解压到该目录下了，不过这种带项目名方式，得通过访问`ip:8080/Project`这样的方式进行访问。聪明的方法是将该目录清空，将.war打包文件改为ROOT.war，部署到服务器后重启一下就可以了。
 
-## Windows安装Tomcat9
+## docker部署
+
+[docker tomcat official images](https://hub.docker.com/_/tomcat)
+
+使用dockers部署前建议先将项目编译打包成war文件。
+
+下面为示范
+
+```bash
+docker run -d -p <host port>:8080 -v <host dir>:/usr/local/tomcat/webapps tomcat:<tag>
+```
+
+**注意了**，tag一定要选对，tag一定要选对，tag一定要选对！请严格按照开发环境所编译打包时的jdk version选择。否则可能会出现只能访问静态页面无法访问动态Servlet页面的问题。花费了我近一个下午才找到这个问题。log不报错，让我蒙在鼓里。直到去docker官网看了一眼才知道latest居然还在用jdk8。所以所谓的latest，并不一定latest，笑
+
+## Windows部署Tomcat9
+
 TomCat用的是Choco包管理器安装。安装完毕后，已经自动配置了环境环境变量。命令行`tomcat9`就可以启动了。
 
 安装完毕后**tomcat.exe**位于choco的bin文件夹中，其他文件位于Windows隐藏的的系统盘文件夹ProgramData中
 
- - conf 文件夹中存放的是xml配置文件
-    - server.xml **最重要**配置端口信息，站点信息等
-    - tomcat-users.xml 配置tomcat面板登录用户
-    - context.xml 配置xml存放路径
-    - web.xml 配置servlet，定向url到具体servl class资源
- - logs 存放log
- - temp
- - webapps 目录下存放多个站点文件夹，通过`ip:8080/文件夹名`即可访问
- - work 貌似是运行时jsp编译的缓存文件夹，大概是 jsp -> java -> class?
+- conf 文件夹中存放的是xml配置文件
+  - server.xml **最重要**配置端口信息，站点信息等
+  - tomcat-users.xml 配置tomcat面板登录用户
+  - context.xml 配置xml存放路径
+  - web.xml 配置servlet，定向url到具体servl class资源
+- logs 存放log
+- temp
+- webapps 目录下存放多个站点文件夹，通过`ip:8080/文件夹名`即可访问
+- work 貌似是运行时jsp编译的缓存文件夹，大概是 jsp -> java -> class?
 
 # 使用IDE构建项目
 
 在IDE中选择
- - JavaEE版本
- - SDK 版本
- - 服务端类型（选择了Tomcat9，打开选项的时候，整个人都不好了，什么JBoss，Glassfish Spring，还有一堆听都没听说过的Orz
- - Lib & Framework （表示就勾了一个Web Application
+
+- JavaEE版本
+- SDK 版本
+- 服务端类型（选择了Tomcat9，打开选项的时候，整个人都不好了，什么JBoss，Glassfish Spring，还有一堆听都没听说过的Orz
+- Lib & Framework （表示就勾了一个Web Application
 
 一步一步接着走IDE就帮你构建好一个项目了。
 
@@ -556,7 +572,7 @@ public class CountBean {
 }
 ```
 
-当scope设置为page时，每次刷新页面，计数都是1。将scope设置为session时，若浏览器接受cookie的话，即可看见计数的叠加。不同设备之间的计数互不干扰。不论是page还是session若没有设置Cookie的话，第一包过去，响应头都会返回Set-Cookie字段。若设置为application时，所有设备请求的时候，都是共享一个计数器实例。
+当scope设置为page时，每次刷新页面，计数都是1。将scope设置为session时，若浏览器接受cookie的话，即可看见计数的叠加。不同设备之间的计数互不干扰。不论是page还是session若没有设置Cookie的话，第一包过去，响应头都会返回Set-Cookie字段。若设置为application时，所有设备请求的时候，都是共享一个计数器实例。注意，如果访问的是静态页面，将不会返回session
 
 ## <jsp:forward />行为
 
@@ -613,9 +629,110 @@ Servlet中能通过request.getRequestDispatcher("someServlet").forward("request,
 
 <jsp:directive />行为与JSP指令可以相互改写，他是为XML格式的JSP准备的。推荐使用这种格式
 
-# JSP隐藏对象
+## JSP隐藏对象
 
 Servlet和JSP中输出数据都需要使用out对象，Servlet中的out对象是通过response.getWriter()方法获取的。而JSP中并没有定义out对象，却可以直接使用这是因为out是JSP内置的隐藏对象。JSP中有9种内置对象。out request config session application page pageContext exception
+
+|对象|描述|
+|--- |--- |
+|request|HttpServletRequest 接口的实例|
+|response|HttpServletResponse 接口的实例|
+|out|JspWriter类的实例，用于把结果输出至网页上|
+|session|HttpSession类的实例|
+|application|ServletContext类的实例，与应用上下文有关|
+|config|ServletConfig类的实例|
+|pageContext|PageContext类的实例，提供对JSP页面所有对象以及命名空间的访问|
+|page|类似于Java类中的this关键字|
+|Exception|Exception类的对象，代表发生错误的JSP页面中对应的异常对象|
+
+## JSP配置
+
+JSP同样可以像Servlet一样在配置文件中进行配置
+
+```xml
+<servlet>
+    <servlet-name>configuration</servlet-name>
+    <jsp-file>/configuration</jsp-file>
+</servlet>
+<servlet-mapping>
+    <servlet-name>configuration</servlet-name>
+    <url-pattern>/configuraion</url-pattern>
+</servlet-mapping>
+```
+
+## EL表达式
+
+JSP可以使用EL表达式，形如`${}`，用来方便读取对象。EL表达式写在JSP的HTML代码当中，不允许写在JSP标签`<% %>`内
+
+count为类CountBean的实例化对象，countNum为private成员
+
+```jsp
+<h1>Hello WeiYuan, Count <%= count.getCountNum()%></h1>
+```
+
+以上代码可以写成
+
+```jsp
+<h1>Hello WeiYuan, Count ${count.countNum} </h1>
+```
+
+EL表达式居然可以直接访问private成员吗？网上看见有的说法是，编译时转换成了getCountNum()的形式，如果没有了getter就无法正常运行了。经过测试“没有了getter就无法正常运行了”属实，如果没有getter会抛出错误`javax.el.PropertyNotFoundException: 类型[club.piclight.JavaWeb.CountBean]上找不到属性[countNum]`
+
+在缓存中找到编译成java文件的对应代码，如下。
+
+```java
+out.write("<h1>Hello WeiYuan, Count ");
+out.write((java.lang.String) org.apache.jasper.runtime.PageContextImpl.proprietaryEvaluate("${count.countNum}", java.lang.String.class, (javax.servlet.jsp.PageContext)_jspx_page_context, null));
+out.write(" </h1>\r\n");
+```
+
+EL表达式还可以读取request，session中的属性，其他JSP隐藏对象的属性。还可以进行Java中允许的操作符运算
+
+```jsp
+${ param.foo } <!--相当于request.getParameter("foo")-->
+${ initParam.foo } <!--相当于config.getInitParameter("foo")-->
+${ header.host } <!--相当于requset.getHeader("host")-->
+```
+
+|隐含对象|描述|
+|--- |--- |
+|pageScope|page 作用域|
+|requestScope|request 作用域|
+|sessionScope|session 作用域|
+|applicationScope|application 作用域|
+|param|Request 对象的参数，字符串|
+|paramValues|Request对象的参数，字符串集合|
+|header|HTTP 信息头，字符串|
+|headerValues|HTTP 信息头，字符串集合|
+|initParam|上下文初始化参数|
+|cookie|Cookie值|
+|pageContext|当前页面的pageContext|
+
+# 会话跟踪Cookie
+
+Cookie 类的一些方法
+
+|方法|描述|
+|--- |--- |
+|public void setDomain(String pattern) |设置 cookie 的域名|
+|public String getDomain() |获取 cookie 的域名|
+|public void setMaxAge(int expiry) |设置 cookie 有效期，以秒为单位，默认有效期为当前session的存活时间|
+|public int getMaxAge() |获取 cookie 有效期，以秒为单位，默认为-1 ，表明cookie会活到浏览器关闭为止|
+|public String getName() |返回 cookie 的名称，名称创建后将不能被修改|
+|public void setValue(String newValue) |设置 cookie 的值|
+|public String getValue() |获取cookie的值|
+|public void setPath(String uri) |设置 cookie 的路径，默认为当前页面目录下的所有 URL，还有此目录下的所有子目录|
+|public String getPath() |获取 cookie 的路径|
+|public void setSecure(boolean flag) |指明 cookie 是否要加密传输|
+|public void setComment(String purpose) |设置注释描述 cookie 的目的。当浏览器将 cookie 展现给用户时，注释将会变得非常有用|
+|public String getComment() |返回描述 cookie 目的的注释，若没有则返回 null|
+
+Session 类的一些方法
+
+Cookie是最早的会话跟踪技术，Session则建立在Cookie的基础之上，当然，在浏览器禁用Cookie的情况下，依然可以通过URL重写技术实现session
+
+Cookie侧重于在客户端浏览器记录数据，而session则侧重将会话信息记录在服务端。
+
 
 ### 记录我遇到的问题
 
