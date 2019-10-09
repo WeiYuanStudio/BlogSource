@@ -1,26 +1,56 @@
 ---
 title: 关于我
-date: 2019-01-17 21:51:27
+date: 2019-10-06 21:51:27
 ---
-现就读于JLUZH大一，专业是软件工程。
-喜欢Google，Apple。讨厌Micro$oft。
+JLUZH软件工程2018级学生，现大学二年生
+
+创建这个个人博客主要目的为了记录笔记，分享技术（当然如果能帮到你那就最好不过了）
+
+## 关于我自己
+
+对计算机所有方面的东西都很感兴趣，啥都懂一点，~~但大多都不太精通。~~接触计算机大概是从幼儿园的时候开始的吧，很小的时候家里就有电脑而且通网了。父亲也是从事计算机行业者（后来因为工作环境原因早早转行了，我还是觉得很可惜，再多工作几年可能就遇上中国互联网爆发发展的时期了），从小受到的影响让我选择了这个爱好。很小的时候我就梦想着成为科学家或者工程师。哈哈，现在也姑且算是朝者个沾边的“软件工程师”努力吧。
+
+常居广东，希望以后能找到广州的开发岗位工作。
+
+- 主要使用Java开发，目前学的最长最深的一门语言，很喜欢Java开发的工程化的感觉，严谨的架构，易于自动生成API Docs
+- 第二喜欢使用Python和JavaScript脚本语言，前者拥有强大的库，做一点实用的脚本解决生活中的问题很方便（比如我开发的AutoWeiBan刷课，逃~）后者也有不错的库，不过主要是前端开发需求
+- C++现在主要用于学习算法数据结构方面
+- 能熟练使用Linux系统，搭建各种常用服务环境（现在用Docker比较多，不用操心配置环境）
+- 了解Web前端页面的开发，简单的js操作和页面样式
+- 最近痴迷于Web后端开发
+
+## 学习时间线
+
+由于这个板块的计划是从2019.10开始的，所以有很多历史悠久的事件就无法追溯了
+
+- 2015 高中之前都是在零零散散的学习计算机知识，主要是了解计算机的一些基础吧。组装电脑，配路由器，重装系统，解决一些简单的故障，在学校里被老师“抓去”管理PPT电脑，在这之前，家里人都不是很支持我学习这方面知识，希望我以学业为主，那时候连简单的站点都不会搭建，而且百度也搜不到什么有用的回答
+- 2016 这大概是我真正开始学习计算机语言的时间，高中课余时间看C++方面的书，封闭管理住宿当然没有实机调试，面向过程程序思维应该是从这个时候建立的
+- 2017 - 2018 高中时间，课余时间学习了不少计算机知识，家人的态度改观，老爸也会陪着我一起折腾一下东西，那个时候粗略的了解了不少各个方面的知识。建立的大学学习、折腾的大概方向。然后也了解到很多技术大佬搭个人博客的操作。终于搭起了人生第一个个人博客，最早是在免费主机空间上搭建起来的WordPress，后来是使用phpStudy搭建了一个Typecho在家中，通过花生壳达到访问。那时候也临近高考了。（不得不说，我很多时候都是顶着家人的压力，尽可能背着他们折腾，心酸）
+- 2018.6 在某博主的安利下，终于熬到暑假，花了十几块钱开了台Linux服务器，一开始是折腾$$R和宝塔面板搭博客，了解网络连接，搭建服务器方面。后来入了Linux的坑。假期开始在父亲的建议下，选一门语言开始学习，选择了Java，不过刚放假还是玩为主
+- 2018.9 
 
 **Editor:** VS Code & Sublime & VIM
 
 **IDE:** IDEA & CLion & WebStorm (JetBrians大法好！)
 
-**技能树:** C++ & JAVA & HTML & CSS & MarkDown
+**技能树:** C++ & JAVA & HTML/CSS & JavaScript & Python (啥都懂一点啥都不懂，最喜欢喝Java)
 
 **Font Family:** Droid Sans Mono & Inconsolata
 
-**Desktop:** Apple Mac Mini A1283(EI Capitan)
-
 **Laptop:** XiaoMi Pro 15(i7-8550U + 16G RAM + Manjaro Linux)
 
-**Mobile Devices:** XiaoMi Mix 2S(Pixel Experience) & iPad Mini 4 & Kindle
+**Mobile Devices:** XiaoMi Mix 2S(Lineage) & iPad Mini 4 & Kindle
 
-**Photographic Equipment:** SONY A6000 & DJI Phantom 3 Pro
+**Photographic Equipment:** SONY A6000
+
+---
 
 **IM:** Hibikie@Telegram
 
-**Mail:** <a target="_blank" href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email=rp_en5mZm52dn5bu39_AzcHD" style="text-decoration:none;">戳这里发邮件联系我</a>
+**GitHub:** WeiYuanStudio
+
+**企鹅:** 1017753318
+
+**Mail:** 1017753318@qq.com
+
+QQMail大概是墙内最稳定的联系方式，墙外的话可以TeleGram或者Twitter私信我。Gmail就不留了，不常看
