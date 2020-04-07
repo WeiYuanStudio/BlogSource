@@ -7,3 +7,4 @@ date: 2020-3-25 16:00:00
 
 - [鸾喈尘の喷火梧桐树](https://darc.pro)
 - [XYenon's Blog](https://blog.xyenon.bid)
+- [Avimitin](https://avimitin.com)
