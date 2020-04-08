@@ -32,6 +32,11 @@ date: 2020-3-25 16:00:00
         border-radius: 10px;
         margin: 20px;
     }
+
+    #link-container {
+        display: flex;
+        flex-flow: row;
+    }
 </style>
 
 <div id="link-container">
