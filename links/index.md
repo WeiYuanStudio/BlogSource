@@ -54,7 +54,7 @@ date: 2020-3-25 16:00:00
                 linkNode.setAttribute('style', '');
                 linkNode.children[1].children[0].innerText = link.name;
                 linkNode.children[1].children[1].innerText = link.intro;
-                linkNode.children[0].setAttribute('src', link.avatar != undefined ? link.avatar : '');
+                linkNode.getElementsByClassName('avatar')[0].setAttribute('src', link.avatar != undefined ? link.avatar : '');
                 linkNode.onclick = () => {
                     window.open(link.link);
                 }
@@ -68,6 +68,7 @@ date: 2020-3-25 16:00:00
 </script>
 
 ---
+
 - [鸾喈尘の喷火梧桐树](https://darc.pro)
 - [XYenon's Blog](https://blog.xyenon.bid)
 - [Avimitin](https://avimitin.com)
