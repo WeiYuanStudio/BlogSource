@@ -11,6 +11,14 @@ date: 2019-10-21 16:10:00
 thumbnail:
 ---
 
+本笔记记录docker使用方面的事项
+
+## 命令
+
+### 端口映射
+
+使用`-p port_host:port_container`即可
+
 ## 常用镜像
 
 ### portainer.io
@@ -35,4 +43,26 @@ docker run --name some-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql:tag
 
 ```bash
 docker run -p 3306:3306 -e MYSQL_ROOT_PASSWORD=0000 -d mysql:latest
+```
+
+### ipfs
+
+该镜像由ipfs团队构建，镜像tag为`ipfs/go-ipfs`，即是ipfs的go实现客户端。有关ipfs的内容感觉可以再开一篇了。
+
+该镜像的docker hub页面 <https://hub.docker.com/r/ipfs/go-ipfs>
+
+关于ipfs，简单的来理解的话，就是由个人部署众多节点位于网络上，节点之间通过P2P连接，当使用浏览器访问一个QMhash的时候，ipfs会向公网请求该数据，就像磁力链的BT一样，然后下载到本地节点，顺便传一份给浏览器。更进一步不准确的说，就是一个P2P下载器，配合一个下载面板。每个人都能搭建自己的节点，通过任意节点，都可以轻松的访问所有ipfs资源（前提是连得上“做种者”资源），得益于多节点的部署，以及ipfs协议的规范，可能将会是一次技术革新，使得分布式文件部署更加容易。
+
+官方部署
+
+```bash
+docker run -d --name ipfs_host -e IPFS_PROFILE=server -v $ipfs_staging:/export -v $ipfs_data:/data/ipfs -p 4001:4001 -p 127.0.0.1:8080:8080 -p 127.0.0.1:5001:5001 ipfs/go-ipfs:latest
+```
+
+示例:
+
+最简启动示范，咱们不要文件映射，太乱了，又不是不能从面板中下载，而且还可以使用docker cli将文件弄出来。需要注意的是`8080`端口为常用web端口，注意判断是否会端口重复。
+
+```bash
+docker run -d --name ipfs_host -e IPFS_PROFILE=server -p 4001:4001 -p 127.0.0.1:8080:8080 -p 127.0.0.1:5001:5001 ipfs/go-ipfs:latest
 ```
