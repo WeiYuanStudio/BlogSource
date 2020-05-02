@@ -45,6 +45,16 @@ docker run --name some-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql:tag
 docker run -p 3306:3306 -e MYSQL_ROOT_PASSWORD=0000 -d mysql:latest
 ```
 
+### Redis
+
+位于官方仓库，该镜像的docker hub页面 <https://hub.docker.com/_/redis/>
+
+最简部署：
+
+```bash
+docker run -itd --name redis-test -p 6379:6379 redis
+```
+
 ### ipfs
 
 该镜像由ipfs团队构建，镜像tag为`ipfs/go-ipfs`，即是ipfs的go实现客户端。有关ipfs的内容感觉可以再开一篇了。
