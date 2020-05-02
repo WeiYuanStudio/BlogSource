@@ -39,15 +39,25 @@ choco config set proxyPassword <passwordThatGetsEncryptedInFile>
 
 ## npm
 
-node package manager 方面，有两种选择，使用淘宝镜像，或者使用代理。
+node package manager 方面，有三种选择，使用淘宝镜像，或者使用代理，或者重新指定registry
 
 ### npm 使用淘宝镜像cnpm
 
 使用命令（注意，若失败，请检查是否授予管理员权限执行）
 
+安装淘宝镜像包管理器`cnpm`
+
 ```bash
 npm install -g cnpm
 ```
+
+接下来以后使用`npm`安装东西的操作可以使用`cnpm`来操作
+
+根据`vue-element-admin`文档所描述
+
+>强烈建议不要用直接使用 cnpm 安装，会有各种诡异的 bug，可以通过重新指定 registry 来解决 npm 安装速度慢的问题。若还是不行，可使用 yarn 替代 npm
+
+虽然我本人使用了这么久都还未发现过问题。不过这一点还是值得注意一下的，他们官方推荐的是**重新指定 registry**，下面有描述
 
 ### npm 使用系统代理
 
@@ -56,6 +66,14 @@ npm install -g cnpm
 ```bash
 npm config set proxy http://server:port
 npm config set https-proxy http://server:port
+```
+
+### npm 重新指定 registry
+
+例如install的时候使用命令
+
+```
+npm install --registry=https://registry.npm.taobao.org
 ```
 
 ## Maven
@@ -126,3 +144,9 @@ sed -i "s@http://.*security.ubuntu.com@http://mirrors.huaweicloud.com@g" /etc/ap
 ## 开源镜像站
 
 [华为源](https://mirrors.huaweicloud.com/)
+[Tuna 清华源](https://mirrors.tuna.tsinghua.edu.cn)
+
+---
+**参考资料**
+
+[vue-element-admin 安装描述](https://panjiachen.gitee.io/vue-element-admin-site/zh/guide/#%E5%8A%9F%E8%83%BD)
