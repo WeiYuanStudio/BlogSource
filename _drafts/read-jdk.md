@@ -18,7 +18,7 @@ date: 2020-05-3 02:10:00
 
 这句话没有半点毛病。
 
-博主在这里要开一个大坑，做啃JDK源码系列，感觉这都可以出一个系列了。
+在这里要开一个大坑，做啃JDK源码系列，感觉这都可以出一个系列了。
 
 参照CodeSheep@Bilibili大佬的视频[BV1V7411U78L](https://www.bilibili.com/video/BV1V7411U78L)，咱们找一些经典来啃
 
@@ -64,11 +64,33 @@ public static long parseLong(String s) throws NumberFormatException {
 throw new NumberFormatException("null");
 ```
 
-所以遇到那种可能会返回null的情况，建议在传入parse前套一个`Objects.requireNonNull()`这样会直接抛NPE，catch的时候会更加直观一些。
+这里给大家示范一下，例程
+
+```java
+import java.lang.Long;
+
+public class Main {
+    public static void main(String args[]) {
+        Long i = Long.parseLong(null);
+    }
+}
+```
+
+输出
+
+```text
+➜  play-ground java Main 
+Exception in thread "main" java.lang.NumberFormatException: null
+        at java.base/java.lang.Long.parseLong(Long.java:655)
+        at java.base/java.lang.Long.parseLong(Long.java:817)
+        at Main.main(Main.java:5)
+```
+
+所以遇到那种可能会向里面传null的情况，建议在传入`parseLong`前套一个`Objects.requireNonNull()`这样遇到null会直接抛NPE，方便catch。
 
 接着会检查`radix`取值范围`2(Character.MIN_RADIX)-36(Character.MAX_RADIX)`
 
-为什么`Character.MAX_RADIX`为`int 36`呢，一开始我也没想懂这个问题，看起来有点眼熟，但是不明原因，到后面我看到`Character`的`DIGITS`数组恍然大悟，`36 = 10（十进制范围） + 26 （26个英文字母）`超出这个范围的话，英文字符也不够表示这么一个数了
+为什么`Character.MAX_RADIX`为`int 36`呢，一开始我也没想懂这个问题，看起来有点眼熟，但是不明原因，到后面我看到`Character`的`DIGITS`数组恍然大悟，`36 = 10（十进制范围，0-9数字） + 26 （26个英文字母）`超出这个范围的话，英文字符也不够表示这么一个数了。
 
 初始化几个值
 
@@ -103,6 +125,7 @@ long multmin = limit / radix;
 long result = 0;
 while (i < len) {
     // Accumulating negatively avoids surprises near MAX_VALUE
+    //产生负数可避免在MAX_VALUE附近出现意外，负数的取值范围更广
     int digit = Character.digit(s.charAt(i++),radix);
     if (digit < 0 || result < multmin) {
         throw NumberFormatException.forInputString(s);
@@ -113,10 +136,100 @@ while (i < len) {
     }
     result -= digit;
 }
-return negative ? result : -result;
+return negative ? result : -result; //如果是正数到最后一步再进行反转
 ```
 
-这里要将字符通过`Character.digit(s.charAt(i++),radix);`先转成十进制的int，然后再回来计算。在Character那边会有一个`int digit(int ch, int radix)`以及DIGITS数组将字符`0-9` `A-Z` `a-z`映射到`0-35`的int范围上返回。
+这里要将字符通过`Character.digit(s.charAt(i++),radix);`先转成十进制的int，然后再回来计算。在Character那边会有一个`int digit(int ch, int radix)`以及DIGITS数组将字符`0-9` `A-Z` `a-z`映射到`0-35`的int范围上返回。详细的可以看`CharacterDataLatin1.java`部分
+
+### valueOf
+
+### toString
+
+Long的`toSting()`
+
+```java
+public static String toString(long i, int radix)
+```
+
+首先检查`radix`，如果不在取值范围`2(Character.MIN_RADIX)-36(Character.MAX_RADIX)`，直接设置默认`radix = 10`不抛出
+
+接着判断是否`radix == 10`，若真返回`toString(i)`
+
+若非`radix == 10`将在下面进一步处理
+
+这里发现一个有趣的设置，会先进行`java.lang.String.COMPACT_STRINGS`的判断，默认值true，检查是否开启字符压缩，关于这个设定的详细信息可以去看`java.lang.String`，里面有详细的介绍,若关闭压缩，则默认使用`LATIN1`编码，否则会使用`UTF16`编码
+
+如果使用`UTF-8`编码的话，会在当前方法中进行`toString()`，否则会移交`toStringUTF16()`处理
+
+当前方法处理`UTF-8`编码，
+
+```java
+byte[] buf = new byte[65]; //先建立一个byte类型的64长度数组作为buffer
+int charPos = 64; //当前写入字符的位置
+boolean negative = (i < 0); //是否负数，若真，会在写入完所有数字之后，在最前面加入负号
+```
+
+接着下面就是对要处理的long i 值不断
+
+```java
+i % radix //对进制radix取余
+i = i / radix; //自除以进制radix
+```
+
+的操作，得到的`int`值会到`Integer.digits`数组中找对应的字符
+
+```java
+static final char[] digits = {
+    '0' , '1' , '2' , '3' , '4' , '5' ,
+    '6' , '7' , '8' , '9' , 'a' , 'b' ,
+    'c' , 'd' , 'e' , 'f' , 'g' , 'h' ,
+    'i' , 'j' , 'k' , 'l' , 'm' , 'n' ,
+    'o' , 'p' , 'q' , 'r' , 's' , 't' ,
+    'u' , 'v' , 'w' , 'x' , 'y' , 'z'
+};
+```
+
+这里奇怪的是这么一个`static final`值的命名方式居然不是全大写风格，猜测是早期的历史遗留问题，我倒是特意翻了下`Integer`的所有`static final`域，发现风格不一（全小写，首字大写驼峰）的基本上都是1.5之前的代码。
+
+总体来说，`toString`方法有几点不同的
+
+- 处理10进制数和非10进制数的不同
+    - 首先是创建buffer大小的不同
+        十进制数创建buffer的时候会计算`stringSize()`，其他指定非10进制的`toString`方法会直接上来分配`byte[65]`
+    - 其次是处理算法上的不同
+        在处理十进制数的时候，一次自除100，一次处理两位，且用加减计算代替取余计算以优化性能。余数显然范围在`0-99`，所以取字符操作会查找`java.lang.Integer.DigitOnes`与`java.lang.Integer.DigitTens`这两个又臭又长的数组，空间换时间。
+
+```java
+static final byte[] DigitTens = {
+    '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+    '1', '1', '1', '1', '1', '1', '1', '1', '1', '1',
+    '2', '2', '2', '2', '2', '2', '2', '2', '2', '2',
+    '3', '3', '3', '3', '3', '3', '3', '3', '3', '3',
+    '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+    '5', '5', '5', '5', '5', '5', '5', '5', '5', '5',
+    '6', '6', '6', '6', '6', '6', '6', '6', '6', '6',
+    '7', '7', '7', '7', '7', '7', '7', '7', '7', '7',
+    '8', '8', '8', '8', '8', '8', '8', '8', '8', '8',
+    '9', '9', '9', '9', '9', '9', '9', '9', '9', '9',
+    } ;
+
+static final byte[] DigitOnes = {
+    '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+    '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+    '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+    '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+    '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+    '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+    '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+    '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+    '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+    '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+    } ;
+```
+
+在超出int范围的循环自除得出每一位字符这种操作，会使用long来计算，当处理到i落到int范围时，会做一个显示类型转换，将余下的long转为int，使用int继续完成接下来数字的处理，优化性能。
+
+在最后阶段，`i2 <= -100`，剩余数据只剩两位了，就会除以10，对10取余，处理最后的两位。而且在最后两位的转字符处理不再去字符数组里面查找，而是直接对`'0'`字符进行加操作得出目标字符的字符值。在处理完毕数字字符后，最后处理加入负号`-`，返回。
 
 ## Character
 
@@ -145,6 +258,7 @@ int digit(int ch, int radix) {
 //
 // Analysis has shown that generating the whole array allows the JIT to generate
 // better code compared to a slimmed down array, such as one cutting off after 'z'
+// 大概意思是写死整个数组可以使JIT生成性能更好的代码，空间换时间
 private static final byte[] DIGITS = new byte[] {
     -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
     -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
