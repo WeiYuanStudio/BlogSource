@@ -64,7 +64,7 @@ public static long parseLong(String s) throws NumberFormatException {
 throw new NumberFormatException("null");
 ```
 
-这里给大家示范一下，例程
+例程
 
 ```java
 import java.lang.Long;
@@ -86,7 +86,9 @@ Exception in thread "main" java.lang.NumberFormatException: null
         at Main.main(Main.java:5)
 ```
 
-所以遇到那种可能会向里面传null的情况，建议在传入`parseLong`前套一个`Objects.requireNonNull()`这样遇到null会直接抛NPE，方便catch。
+另一个类似的`decode()`方法，却已经有`@NotNull`注解检查了，这里保持不变可能是历史遗留问题，要照顾旧代码向下兼容
+
+所以遇到那种可能会向里面传null的情况，建议在传入`parseLong()`前套一个`Objects.requireNonNull()`这样遇到null会直接抛NPE，方便catch。
 
 接着会检查`radix`取值范围`2(Character.MIN_RADIX)-36(Character.MAX_RADIX)`
 
@@ -141,7 +143,92 @@ return negative ? result : -result; //如果是正数到最后一步再进行反
 
 这里要将字符通过`Character.digit(s.charAt(i++),radix);`先转成十进制的int，然后再回来计算。在Character那边会有一个`int digit(int ch, int radix)`以及DIGITS数组将字符`0-9` `A-Z` `a-z`映射到`0-35`的int范围上返回。详细的可以看`CharacterDataLatin1.java`部分
 
+### decode
+
+该方法封装了`valueOf(String nm, int radix)`方法，通过判断开头的`+ -`以及`0X 0x #`来判断是否正负以及16还是10进制
+
 ### valueOf
+
+```java
+public static Long valueOf(long l) {
+    final int offset = 128;
+    if (l >= -128 && l <= 127) { // will cache
+        return LongCache.cache[(int)l + offset];
+    }
+    return new Long(l);
+}
+```
+
+这里可以看到，当属于`l >= -128 && l <= 127`的long值，会去静态类`LongCache.cache`里面调取。**如果超过该范围，就会新建一个Long对象。**
+
+```java
+private static class LongCache {
+    private LongCache(){}
+
+    static final Long cache[] = new Long[-(-128) + 127 + 1];
+
+    static {
+        for(int i = 0; i < cache.length; i++)
+            cache[i] = new Long(i - 128);
+    }
+}
+```
+
+可以看到这个类在首次加载的时候就会被初始化，将创建范围`l >= -128 && l <= 127`的long对象缓存。
+
+回到上面重点，**如果超过该范围，就会新建一个Long对象。**意味着，如果你使用`==`运算符去比较Long的**包装类型**，将会造成意料之外的问题。
+
+在范围`l >= -128 && l <= 127`还好说，会调用初始化时创建好的缓存对象，刚好返回的是缓存，内存地址相同。但是超出这个范围的**包装类型**，进行`==`运算的时候就遭殃了，`valueOf`将创建一个新的对象返回。他们两个的地址将不可能为同一内存地址。
+
+贴测试代码
+
+```java
+import java.lang.Long;
+
+public class Main {
+    public static void main(String args[]) {
+        System.out.println("====> Use ==");
+        for (Integer i = -129; i <= 128; ++i) {
+            String valueString = i.toString();
+            Long j = Long.parseLong(valueString);
+            Long j2 = Long.parseLong(valueString);
+            if (j != j2)
+                System.out.println("!= : " + i);
+        }
+        System.out.println("====> Use .equals");
+        for (Integer i = -129; i <= 128; ++i) {
+            String valueString = i.toString();
+            Long j = Long.parseLong(valueString);
+            Long j2 = Long.parseLong(valueString);
+            if (!j.equals(j2))
+                System.out.println("!= : " + i);
+        }
+        System.out.println("====> long");
+        for (Integer i = -129; i <= 128; ++i) {
+            String valueString = i.toString();
+            long j = Long.parseLong(valueString);
+            long j2 = Long.parseLong(valueString);
+            if (j != j2)
+                System.out.println("!= : " + i);
+        }
+    }
+}
+```
+
+输出：
+
+```text
+➜  play-ground java Main      
+====> Use ==
+!= : -129
+!= : 128
+====> Use .equals
+====> long
+```
+
+所以，在**对比两个long的包装类型是否相等**的时候，请务必使用`equals()`方法。否则遇到范围`l >= -128 && l <= 127`之外的long值，进行`==`运算时将发生意料之外的返回。
+
+其次，创建Long对象时，请不要使用`public Long()`构造，而是使用`valueOf()`因为当数值属于`l >= -128 && l <= 127`时，会返回内部静态类内的缓存对象，而不是直接创建新对象，从而优化内存使用。
 
 ### toString
 
@@ -153,7 +240,7 @@ public static String toString(long i, int radix)
 
 首先检查`radix`，如果不在取值范围`2(Character.MIN_RADIX)-36(Character.MAX_RADIX)`，直接设置默认`radix = 10`不抛出
 
-接着判断是否`radix == 10`，若真返回`toString(i)`
+接着判断是否`radix == 10`，若真返回`toString(i)`，即移交专门处理十进制数的方法。
 
 若非`radix == 10`将在下面进一步处理
 
@@ -192,7 +279,8 @@ static final char[] digits = {
 这里奇怪的是这么一个`static final`值的命名方式居然不是全大写风格，猜测是早期的历史遗留问题，我倒是特意翻了下`Integer`的所有`static final`域，发现风格不一（全小写，首字大写驼峰）的基本上都是1.5之前的代码。
 
 总体来说，`toString`方法有几点不同的
-
+- 处理是否压缩字符的不同
+    如果是处理非压缩字符使用`UTF16`的话，无论是10进制还是其他进制，初始化`buffer`的时候，容量是压缩字符`LATIN1`编码的两倍
 - 处理10进制数和非10进制数的不同
     - 首先是创建buffer大小的不同
         十进制数创建buffer的时候会计算`stringSize()`，其他指定非10进制的`toString`方法会直接上来分配`byte[65]`
