@@ -23,6 +23,32 @@ thumbnail:
 
 ### portainer.io
 
+### tomcat
+
+学校刚开始教Tomcat，夭寿
+
+该镜像位于官方仓库 <https://hub.docker.com/_/tomcat>，如果有特殊版本需求，请访问仓库页面查找对应的jdk与tomcat版本组合。 ~你看看官方那版本多的，为了各种版本组合，操碎了心，0202年了Spring Boot他不香么~
+
+```text
+CATALINA_BASE:   /usr/local/tomcat
+CATALINA_HOME:   /usr/local/tomcat
+CATALINA_TMPDIR: /usr/local/tomcat/temp
+JRE_HOME:        /usr
+CLASSPATH:       /usr/local/tomcat/bin/bootstrap.jar:/usr/local/tomcat/bin/tomcat-juli.jar
+```
+
+最简启动
+
+```text
+docker run -d -p <host_port>:8080 -v <dir to war>:/usr/local/tomcat/webapps tomcat
+```
+
+例如我将打包好的`war`文件放置到`/Users/weiyuan/.tomcat-webapps`目录下。然后我想让服务部署在宿主机端口`8080`
+
+```text
+docker run -d -p 8080:8080 -v /Users/weiyuan/.tomcat-webapps:/usr/local/tomcat/webapps tomcat
+```
+
 ### Mysql
 
 该镜像由Mysql官方构建，位于docker hub官方镜像库中，直接使用mysql即可拉取。
