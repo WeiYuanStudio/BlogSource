@@ -7,11 +7,12 @@ tags:
   - docker
   - 容器
   - 笔记
-date: 2019-10-21 16:10:00
-thumbnail:
+date: 2020-10-21 16:10:00
 ---
 
 本笔记记录docker使用方面的事项
+
+持续更新
 
 ## 命令
 
@@ -49,6 +50,8 @@ docker run -d -p <host_port>:8080 -v <dir to war>:/usr/local/tomcat/webapps tomc
 docker run -d -p 8080:8080 -v /Users/weiyuan/.tomcat-webapps:/usr/local/tomcat/webapps tomcat
 ```
 
+**注意了**，tag一定要选对，tag一定要选对，tag一定要选对！请严格按照开发环境所编译打包时的jdk version选择。否则可能会出现只能访问静态页面无法访问动态Servlet页面的问题。
+
 ### Mysql
 
 该镜像由Mysql官方构建，位于docker hub官方镜像库中，直接使用mysql即可拉取。
@@ -69,6 +72,18 @@ docker run --name some-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql:tag
 
 ```bash
 docker run -p 3306:3306 -e MYSQL_ROOT_PASSWORD=0000 -d mysql:latest
+```
+
+数据备份
+
+首先切到你要放置备份的路径，然后执行下列
+
+```bash
+docker exec CONTAINER /usr/bin/mysqldump -u root --password=root DATABASE > backup.sql
+```
+
+```bash
+cat backup.sql | docker exec -i CONTAINER /usr/bin/mysql -u root --password=root DATABASE
 ```
 
 ### Redis
@@ -102,3 +117,8 @@ docker run -d --name ipfs_host -e IPFS_PROFILE=server -v $ipfs_staging:/export -
 ```bash
 docker run -d --name ipfs_host -e IPFS_PROFILE=server -p 4001:4001 -p 127.0.0.1:8080:8080 -p 127.0.0.1:5001:5001 ipfs/go-ipfs:latest
 ```
+
+---
+**参考资料：**
+
+[spalladino/mysql-docker.sh at github](https://gist.github.com/spalladino/6d981f7b33f6e0afe6bb)
