@@ -53,7 +53,23 @@ tags:
 docker run -d -p <host port>:8080 -v <host dir>:/usr/local/tomcat/webapps tomcat:<tag>
 ```
 
+若无构建docker镜像，可以直接`-v`映射`webapps`路径到宿主机下使用。
+
+最简启动
+
+```text
+docker run -d -p <host_port>:8080 -v <dir to war>:/usr/local/tomcat/webapps tomcat
+```
+
+例如我将打包好的`war`文件放置到`/Users/weiyuan/.tomcat-webapps`目录下。然后我想让服务部署在宿主机端口`8080`
+
+```text
+docker run -d -p 8080:8080 -v /Users/weiyuan/.tomcat-webapps:/usr/local/tomcat/webapps tomcat
+```
+
 **注意了**，tag一定要选对，tag一定要选对，tag一定要选对！请严格按照开发环境所编译打包时的jdk version选择。否则可能会出现只能访问静态页面无法访问动态Servlet页面的问题。花费了我近一个下午才找到这个问题。log不报错，让我蒙在鼓里。直到去docker官网看了一眼才知道latest居然还在用jdk8。所以所谓的latest，并不一定latest，笑
+
+**更新:**大概时隔一年左右吧，现在官方已经将latest更新到`openjdk11`与`tomcat9`了
 
 ## Windows部署Tomcat9
 
