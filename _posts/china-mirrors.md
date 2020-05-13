@@ -82,6 +82,8 @@ npm install --registry=https://registry.npm.taobao.org
 
 需要我们修改 Maven 配置文件`Settings.xml`，[官方详细说明](https://maven.apache.org/settings.html)
 
+这个文件一般放置在`~/.m2/`下，若没有，需要自己创建。你还可以创建多一个副本，在IDEA的设置里的Maven部分，选择使用对应的配置文件
+
 这里使用阿里镜像源
 
 经过本人使用阿里镜像源，发现在项目中使用了 Spring Boot 情况下，国内镜像源**疑似**存在**资源缺失**的问题，若出现问题，建议直接使用代理解决问题
@@ -102,21 +104,36 @@ npm install --registry=https://registry.npm.taobao.org
 
 ### Maven 使用本地代理
 
-修改maven配置文件中的proxy部分
+修改maven配置文件中的proxy部分。
+
+最简配置大概如下，使用了clash默认代理端口，实测下载速度直接拉满起飞。
 
 ```xml
-<proxies>
-    <proxy>
-        <id>myproxy</id>
-        <active>true</active>
-        <protocol>http</protocol>
-        <host>proxy.somewhere.com</host>
-        <port>8080</port>
-        <username>proxyuser</username>
-        <password>somepassword</password>
-        <nonProxyHosts>*.google.com|ibiblio.org</nonProxyHosts>
-    </proxy>
-</proxies>
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+ 
+    <!-- proxies
+    | This is a list of proxies which can be used on this machine to connect to the network.
+    | Unless otherwise specified (by system property or command-line switch), the first proxy
+    | specification in this list marked as active will be used.
+    |-->
+    <proxies>
+
+        <proxy>
+            <id>localhost</id>
+            <active>true</active>
+            <protocol>http</protocol>
+            <username></username>
+            <password></password>
+            <host>localhost</host>
+            <port>7890</port>
+            <nonProxyHosts></nonProxyHosts>
+        </proxy>
+       
+    </proxies>
+ 
+</settings>
 ```
 
 ## apt
@@ -149,4 +166,6 @@ sed -i "s@http://.*security.ubuntu.com@http://mirrors.huaweicloud.com@g" /etc/ap
 ---
 **参考资料**
 
-[vue-element-admin 安装描述](https://panjiachen.gitee.io/vue-element-admin-site/zh/guide/#%E5%8A%9F%E8%83%BD)
+[vue-element-admin - 安装描述](https://panjiachen.gitee.io/vue-element-admin-site/zh/guide/#%E5%8A%9F%E8%83%BD)
+
+[Maven proxy settings - By Lokesh Gupta](https://howtodoinjava.com/maven/maven-proxy-settings/)
