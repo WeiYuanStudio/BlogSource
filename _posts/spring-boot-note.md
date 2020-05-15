@@ -18,7 +18,9 @@ Spring boot 的学习笔记
 
 > 工欲善其事，必先利其器
 
-这次一次性把Spring boot 2.2.6 项目初始化的依赖过一遍。以下是我个人一点点翻看写的，可能会有疏漏，欢迎发送邮件，或者在我的博客Github仓库中的issue提出您宝贵的建议
+这次一次性把Spring boot 2.2.6 项目初始化的依赖过一遍。以下是我个人一点点翻看写的，可能会有疏漏，欢迎提出您宝贵的建议
+
+<!--more-->
 
  - Developer Tools
     - Spring Boot DevTools
@@ -39,7 +41,7 @@ Spring boot 的学习笔记
     - Rest Repositories HAL Browser
         REST Repositories附带一个HAL Browswer，方便在浏览器上直接操作Rest Repositories接口，有Django内味了
     - Spring HATEOAS
-        REST HATEOAS规范的接口，访问api时，返回数据含有api的使用方式，暂时用不上
+        REST HATEOAS规范的接口，Hypermedia API的设计被称为HATEOAS，访问api时，返回结果中提供链接，连向其他API方法，使得用户不查文档，也知道下一步应该做什么。暂时用不上
     - Spring WebServices
         提供SOAP服务，简而言之就是提供XML格式的HTTP接口
     - Jersey
@@ -72,7 +74,7 @@ Spring boot 的学习笔记
         JPA，基于Hibernate。使用方法名即可访问数据库。十分便捷
 
 ---
-参考资料：
+**参考资料**
 
 [实战Spring Boot 2.0 Reactive编程系列 - WebFlux初体验 By 零壹技术栈lv-4 @ 掘金](https://juejin.im/post/5b3a24386fb9a024ed75ab36)
 

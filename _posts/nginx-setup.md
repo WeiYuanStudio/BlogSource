@@ -2,6 +2,9 @@
 title: Nginx 简单配置
 date: 2020-03-25 20:00:00
 tags:
+  - 配置
+  - linux
+  - 笔记
 ---
 
 nginx的配置笔记
