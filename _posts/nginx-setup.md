@@ -35,6 +35,8 @@ nginx: configuration file /etc/nginx/nginx.conf test is successful
 
 即可在这里看到配置文件的路径`/etc/nginx/nginx.conf`。接下来就可以使用vim编辑器编辑Nginx配置文件。PS:默认HTTP服务目录为`/usr/share/nginx/html`或者`/var/www/html`，或者可以在默认配置文件中查看
 
+推荐一个nginx配置文件模版生成。点点鼠标即可生成配置文件
+
 ## 启动Nginx
 
 执行命令`nginx`即可直接启动Nginx，正常情况下，不会有任何返回。（古人云，*nix的美学，没有消息就是最好的消息。）这时候你应该可以正常访问你的站点了。
