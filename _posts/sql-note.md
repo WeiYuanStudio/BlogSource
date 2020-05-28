@@ -91,6 +91,63 @@ date: 2020-04-15 10:00:00
 ### 数据库模式
 
 
+## 基本表的创建
+
+一个基本表的创建语句格式如下
+
+```sql
+CREATE TABLE <表名> (
+    <属性列名> <数据类型> [列级完整性约束],
+    [,<属性列名> <数据类型> [列级完整性约束], ...]
+    [,<表级完整性约束>]
+)
+```
+
+关于数据类型，可以参照官方站点文档
+
+不同数据库系统数据类型并不完全一致，实际操作中，还得以官方文档等资料入手。
+
+- [MySQL 8.0 Data-types](https://dev.mysql.com/doc/refman/8.0/en/data-types.html)
+- [MySQL 数据类型 | 菜鸟教程](https://www.runoob.com/mysql/mysql-data-types.html)
+- [Datatypes In SQLite Version 3](https://www.sqlite.org/datatype3.html)
+
+
+## 完整性约束
+
+### 主键约束
+
+当数据**插入或修改**时，关系数据库将检查各元组的主键是否**唯一**，检查主键中的各属性，即**主属性**是否不为空。否则将拒绝操作 
+
+#### 定义方法
+
+当完成数据库表列数据的定义后，在表级完整约束，单独定义主键约束
+
+```sql
+PRIMARY KEY (SNO) #主键
+```
+
+尽可能不使用联合主键，数据库复杂度上升
+
+```sql
+PRIMARY KEY (SNO, CNO) #联合主键
+```
+
+### 外键约束
+
+#### 定义方法
+
+```sql
+FOREIGN KEY (<外键>) REFERENCES <被参照表名> (<与外键对应的主键名>)
+```
+
+用户自定义外键策略
+
+```sql
+ON UPDATE {CASCADE | NO ACTION}
+ON DELETE {CASCADE | NO ACTION}
+```
+
+
 
 ---
 
@@ -99,3 +156,9 @@ date: 2020-04-15 10:00:00
 [数据库原理与应用 -- 孙孔峰、王舒、曾志平、单缅 @中国大学Mooc](https://www.icourse163.org/spoc/learn/GDY345-1451774169)
 
 [数据库@Wikipedia](https://zh.wikipedia.org/wiki/%E6%95%B0%E6%8D%AE%E5%BA%93)
+
+[MySQL 8.0 Data-types](https://dev.mysql.com/doc/refman/8.0/en/data-types.html)
+
+[MySQL 数据类型 | 菜鸟教程](https://www.runoob.com/mysql/mysql-data-types.html)
+
+[SQL教程 - 廖雪峰的官方网站](https://www.liaoxuefeng.com/wiki/1177760294764384)
