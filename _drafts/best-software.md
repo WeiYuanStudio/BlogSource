@@ -15,10 +15,30 @@ tags:
  - youtube-dl (油管下载cli)
  - Krita (开源绘画软件)
 
+## 跨平台
+
+- JetBrains 全家桶不解释
+- PostMan HTTP调试利器
+- OBS 录屏，推流工具
+- balenaEtcher U盘ISO烧写工具
+- FDM 多线程GUI下载
+- Clash 支持多种代理协议，强大的分流策略，对标闭源软件Surge
+- SSR 代理工具中的暴力美学
+
 ## Windows
 
  - PotPlayer 强大的免费播放器，无数所不能解，Windows必备播放器
  - Source Tree 强大的图形化Git管理工具
+ - SpaceSniffer 磁盘占用分析
+ - Rufus U盘ISO烧写工具
+ - uTorrent 2.0.4 可能是Windows端公认的P2P下载老牌工具，后续版本插入广告，只推荐旧版本，功能几乎无变化
+
+## Mac
+
+- IINA 可能是Mac上最棒的播放器了，次于Windows平台的PotPlayer
+- Kap 录屏工具，支持导出包括GIF，MP4，WebM格式
+- OmniDiskSweeper 磁盘占用分析
+- Keka 压缩工具，兼容性比MacOS自带的压缩工具会兼容性更好
 
 ## NPM组件
 
@@ -34,3 +54,4 @@ tags:
 ](https://blog.csdn.net/tkwxty/article/details/34474501)
   - [OkHttp](https://github.com/square/okhttp) 一个HTTP客户端库，可用于Android 与Java开发，需要依赖Okio
   - [Okio](https://github.com/square/okio) 一个IO库
+  
