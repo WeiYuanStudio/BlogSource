@@ -90,9 +90,19 @@ Child progress -> pid: 10316  B
 Child progress -> pid: 10317  C
 ```
 
+linux内核在2.6.32版本后，优先让子进程运行，查阅资料基本回答都是由于父进程优先运行一般会操作内存，进而导致COW，需要页拷贝，优先运行子进程若子进程进行`exec`，即可避免COW，优化性能。
+
+该特性可以在`/proc/sys/kernel/sched_child_runs_first`中修改，使用`echo`将一个非0值写入该文件，即可修改此特性。之后运行例程，你将得到不同的输出顺序
+
 ![linux-fork-flow](https://blog-1257799428.cos.ap-guangzhou.myqcloud.com/operating-system-note/linux-fork-flow.png-compress)
 
 ---
 参考资料
 
 [王道考研操作系统知识点整理](https://legacy.gitbook.com/book/wizardforcel/wangdaokaoyan-os/details)
+
+[三歪听说你们需要操作系统](https://mp.weixin.qq.com/s/BWQB_0UrusiEwkPcUMs0vw)
+
+[Does the Linux scheduler prefer to run child process after fork()? - Stack Overflow](https://stackoverflow.com/questions/23695915/does-the-linux-scheduler-prefer-to-run-child-process-after-fork)
+
+[fork之后，父子进程的先后执行顺序如何反映？ - 知乎](https://www.zhihu.com/question/59296096)
