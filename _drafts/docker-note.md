@@ -26,7 +26,7 @@ date: 2020-10-21 16:10:00
 
 ### tomcat
 
-学校刚开始教Tomcat，夭寿
+学校刚开始教Java web 而且用的是 Tomcat，夭寿
 
 该镜像位于官方仓库 <https://hub.docker.com/_/tomcat>，如果有特殊版本需求，请访问仓库页面查找对应的jdk与tomcat版本组合。 ~你看看官方那版本多的，为了各种版本组合，操碎了心，0202年了Spring Boot他不香么~
 
@@ -117,6 +117,24 @@ docker run -d --name ipfs_host -e IPFS_PROFILE=server -v $ipfs_staging:/export -
 ```bash
 docker run -d --name ipfs_host -e IPFS_PROFILE=server -p 4001:4001 -p 127.0.0.1:8080:8080 -p 127.0.0.1:5001:5001 ipfs/go-ipfs:latest
 ```
+
+### seafile
+
+文件共享服务，适合局域网使用。该仓库为私人仓库
+
+不推荐使用nextcloud在docker中使用，修改域名安全配置需要编辑器，然而容器中貌似是一个编辑器都木有。所以docker搭建文件服务暂时先用seafile
+
+```bash
+docker run -d --name seafile \
+  -e SEAFILE_SERVER_HOSTNAME=192.168.1.100 \
+  -e SEAFILE_ADMIN_EMAIL=admin \
+  -e SEAFILE_ADMIN_PASSWORD=0000 \
+  -p 80:80 \
+  seafileltd/seafile:latest
+```
+
+必须使用80端口，否则上传文件将发生跨域拦截问题，上传文件并没有根据使用的端口进行上传。
+官方应该修修这个问题，并不是每个人都会将服务挂载到80端口
 
 ---
 **参考资料：**
